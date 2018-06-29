@@ -14,3 +14,5 @@ sudo chown $USER:$USER -R storage
 Image for service php-cli was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
 
 docker-compose exec php-cli php artisan tinker 
+
+docker-compose exec php-cli php artisan migrate 
