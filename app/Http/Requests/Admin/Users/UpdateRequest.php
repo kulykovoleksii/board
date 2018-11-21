@@ -1,30 +1,21 @@
 <?php
 
-namespace App\Http\Requests\Admin\Users;
+namespace App\Http\Middleware;
 
-use App\Entity\User;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
-/**
- * @property User $user
- */
-class UpdateRequest extends FormRequest
+class FilledProfile
 {
-    public function authorize(): bool
+    public function handle($request, \Closure $next)
     {
-        return true;
-    }
+        $user = Auth::user();
 
-    public function rules(): array
-    {
-        return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,id,' . $this->user->id,
-            'role' => ['required', 'string', Rule::in([
-                User::ROLE_USER,
-                User::ROLE_ADMIN,
-            ])]
-        ];
+        if (!$user->hasFilledProfile()) {
+            return redirect()
+                ->route('cabinet.profile.home')
+                ->with('error', 'Please fill your profile and verify your phone.');
+        }
+
+        return $next($request);
     }
 }
