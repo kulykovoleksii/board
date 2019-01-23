@@ -1,4 +1,5 @@
-version: '2'
+version: '3'
+
 services:
     nginx:
         build:
@@ -78,3 +79,9 @@ services:
             - ./storage/docker/elasticsearch:/usr/share/elasticsearch/data
         ports:
             - "9201:9200"
+    composer:
+        image: composer:1.8
+        volumes:
+            - ./:/var/www
+        working_dir: /var/www
+        command: composer install
