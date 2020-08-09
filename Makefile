@@ -43,3 +43,4 @@ memory:
 perm:
 	sudo chgrp -R www-data storage bootstrap/cache
 	sudo chmod -R ug+rwx storage bootstrap/cache
+	sudo chmod -R 777 /home/alexey/Code/my/board/storage/docker/mysql
