@@ -161,6 +161,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\SmsServiceProvider::class,
         App\Providers\CacheServiceProvider::class,
+        App\Providers\SearchServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
 
     ],
 

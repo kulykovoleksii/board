@@ -1,7 +1,7 @@
 FROM php:7.1-fpm
 
 RUN apt-get update && apt-get install -y wget git libpng-dev unzip libzip-dev libmcrypt-dev default-mysql-client \
-    && docker-php-ext-install mcrypt pdo_mysql
+    && docker-php-ext-install mcrypt pdo_mysql pcntl
 
 # Install PECL extensions
 RUN pecl install xdebug

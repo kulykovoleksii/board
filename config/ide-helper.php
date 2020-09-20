@@ -13,8 +13,6 @@ return array(
 
     'filename'  => '_ide_helper',
     'format'    => 'php',
-    
-    'meta_filename' => '.phpstorm.meta.php',
 
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +23,7 @@ return array(
     |
     */
 
-    'include_fluent' => false,
+    'include_fluent' => true,
 
     /*
     |--------------------------------------------------------------------------
