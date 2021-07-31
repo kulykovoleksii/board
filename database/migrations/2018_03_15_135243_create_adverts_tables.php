@@ -10,9 +10,12 @@ class CreateAdvertsTables extends Migration
     {
         Schema::create('advert_adverts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->references('id')->on('users')->onDelete('CASCADE');
-            $table->integer('category_id')->references('id')->on('advert_categories');
-            $table->integer('region_id')->nullable()->references('id')->on('advert_regions');
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
+            $table->unsignedInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('advert_categories');
+            $table->unsignedInteger('region_id')->nullable();
+            $table->foreign('region_id')->references('id')->on('regions');
             $table->string('title');
             $table->integer('price');
             $table->text('address');
@@ -25,15 +28,18 @@ class CreateAdvertsTables extends Migration
         });
 
         Schema::create('advert_advert_values', function (Blueprint $table) {
-            $table->integer('advert_id')->references('id')->on('advert_adverts')->onDelete('CASCADE');
-            $table->integer('attribute_id')->references('id')->on('advert_attributes')->onDelete('CASCADE');
+            $table->unsignedInteger('advert_id');
+            $table->foreign('advert_id')->references('id')->on('advert_adverts')->onDelete('CASCADE');
+            $table->unsignedInteger('attribute_id');
+            $table->foreign('attribute_id')->references('id')->on('advert_attributes')->onDelete('CASCADE');
             $table->string('value');
             $table->primary(['advert_id', 'attribute_id']);
         });
 
         Schema::create('advert_advert_photos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('advert_id')->references('id')->on('advert_adverts')->onDelete('CASCADE');
+            $table->unsignedInteger('advert_id');
+            $table->foreign('advert_id')->references('id')->on('advert_adverts')->onDelete('CASCADE');
             $table->string('file');
         });
     }

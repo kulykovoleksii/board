@@ -369,3 +369,19 @@ Breadcrumbs::register('admin.adverts.categories.attributes.edit', function (Crum
     $crumbs->parent('admin.adverts.categories.attributes.show', $category, $attribute);
     $crumbs->push('Edit', route('admin.adverts.categories.attributes.edit', [$category, $attribute]));
 });
+
+//:TODO исправить
+
+Breadcrumbs::register('cabinet.adverts.photos', function (
+//    Crumbs $crumbs, Region $region
+) {
+//    $crumbs->parent('admin.regions.show', $region);
+//    $crumbs->push('Edit', route('admin.regions.edit', $region));
+});
+
+Breadcrumbs::register('cabinet.adverts.edit', function (
+//    Crumbs $crumbs, Region $region
+) {
+//    $crumbs->parent('admin.regions.show', $region);
+//    $crumbs->push('Edit', route('admin.regions.edit', $region));
+});

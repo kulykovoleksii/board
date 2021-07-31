@@ -1,14 +1,14 @@
 FROM php:7.1-fpm
 
-RUN apt-get update && apt-get install -y wget git libpng-dev unzip libzip-dev libmcrypt-dev default-mysql-client \
-    && docker-php-ext-install mcrypt pdo_mysql pcntl
+RUN apt-get update && apt-get install -y libmcrypt-dev mariadb-client \
+    && docker-php-ext-install mcrypt pdo_mysql
 
 # Install PECL extensions
-RUN pecl install xdebug
-RUN docker-php-ext-enable xdebug
-RUN echo 'xdebug.remote_port=9000' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-RUN echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-RUN echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#RUN pecl install xdebug
+#RUN docker-php-ext-enable xdebug
+#RUN echo 'xdebug.remote_port=9000' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#RUN echo 'xdebug.remote_enable=1' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+#RUN echo 'xdebug.remote_connect_back=1' >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN wget https://getcomposer.org/installer -O - -q | php -- --install-dir=/bin --filename=composer --quiet
 

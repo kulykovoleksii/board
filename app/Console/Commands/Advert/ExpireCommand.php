@@ -23,7 +23,7 @@ class ExpireCommand extends Command
     {
         $success = true;
 
-        foreach (Advert::active()->where('expired_at', '<', Carbon::now())->cursor() as $advert) {
+        foreach (Advert::active()->where('expires_at', '<', Carbon::now())->cursor() as $advert) {
             try {
                 $this->service->expire($advert);
             } catch (\DomainException $e) {
