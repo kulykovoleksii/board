@@ -164,6 +164,7 @@ return [
         App\Providers\CacheServiceProvider::class,
         App\Providers\SearchServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
+        Sentry\Laravel\ServiceProvider::class,
 
     ],
 
@@ -213,6 +214,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Sentry' => Sentry\Laravel\Facade::class,
 
     ],
 
