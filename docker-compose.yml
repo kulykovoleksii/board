@@ -19,8 +19,6 @@ services:
             dockerfile: docker/php-fpm.docker
         volumes:
             - ./:/var/www
-            - ./logs/php-error.log:/var/log/error.log
-            - ./logs/php-access.log:/var/log/access.log
         links:
             - mysql
             - redis
@@ -37,8 +35,6 @@ services:
             dockerfile: docker/php-cli.docker
         volumes:
             - ./:/var/www
-            - ./logs/php-error.log:/var/log/error.log
-            - ./logs/php-access.log:/var/log/access.log
         links:
             - mysql
             - redis
