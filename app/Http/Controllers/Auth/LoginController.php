@@ -44,11 +44,15 @@ class LoginController extends Controller
         if ($authenticate) {
             $request->session()->regenerate();
             $this->clearLoginAttempts($request);
+
+            /** @var User $user */
             $user = Auth::user();
+
             if ($user->isWait()) {
                 Auth::logout();
                 return back()->with('error', 'You need to confirm your account. Please check your email.');
             }
+
             if ($user->isPhoneAuthEnabled()) {
                 Auth::logout();
                 $token = (string)random_int(10000, 99999);
