@@ -90,12 +90,16 @@ Route::group(
     function () {
         Route::get('/', [CabinetHomeController::class, 'index'])->name('home');
 
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.home');
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
+        Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
+            Route::get('/', [ProfileController::class, 'index'])->name('home');
+            Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
+            Route::put('/update', [ProfileController::class, 'update'])->name('update');
 
-        Route::post('/phone/verify', [PhoneController::class, 'verify'])->name('phone.verify');
-        Route::post('/phone/auth', [PhoneController::class, 'auth'])->name('phone.auth');
+            Route::post('/phone', [PhoneController::class, 'request']);
+            Route::get('/phone', [PhoneController::class, 'form'])->name('phone');
+            Route::put('/phone', [PhoneController::class, 'verify'])->name('phone.verify');
+            Route::post('/phone/auth', [PhoneController::class, 'auth'])->name('phone.auth');
+        });
 
         Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites.index');
         Route::delete('favorites/{advert}', [FavoriteController::class, 'remove'])->name('favorites.remove');
