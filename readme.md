@@ -83,7 +83,7 @@ Educational Platform is a feature-rich learning management system that enables i
 - 🐳 Docker containerization (Nginx, PHP-FPM, MySQL, Redis, Elasticsearch)
 - 🔐 Laravel Passport OAuth2 authentication
 - 📨 Email verification
-- 📱 Phone verification with SMS
+- 📱 Phone verification with SMS (Twilio)
 - 🌐 Social login (Network authentication)
 - 🔄 Laravel Horizon for queue management
 - 📊 Sentry error tracking
@@ -191,6 +191,9 @@ docker-compose exec php-cli composer install
 
 # Install frontend dependencies
 docker-compose exec node yarn install
+
+# (Optional) Install Twilio SDK for SMS functionality
+docker-compose exec php-cli composer require twilio/sdk
 ```
 
 ### 6. Generate Application Key
@@ -272,12 +275,23 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 ### SMS Configuration
 
-Configure SMS provider for phone verification:
+Configure **Twilio** for phone verification (free $15 trial credits):
+
+1. Sign up at [Twilio](https://www.twilio.com/try-twilio)
+2. Get your Account SID and Auth Token from the console
+3. Get a Twilio phone number
+4. Update `.env`:
 
 ```env
-SMS_DRIVER=your_provider
-SMS_API_KEY=your_api_key
+TWILIO_SID=your_account_sid
+TWILIO_AUTH_TOKEN=your_auth_token
+TWILIO_PHONE_NUMBER=your_twilio_number
 ```
+
+**Alternative providers:**
+- **Vonage (Nexmo)** - €2 free credit
+- **AWS SNS** - 100 free SMS/month (12 months)
+- **MessageBird** - Good for Europe
 
 ### Social Login
 
