@@ -686,7 +686,3 @@ For issues and questions:
 - Docker Community
 - Elasticsearch
 - All contributors and open-source libraries used in this project
-
----
-
-**Made with ❤️ using Laravel and Claude Code**
