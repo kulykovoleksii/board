@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
         $this->registerPermissions();
 
-        Passport::routes();
+        // Passport routes are now registered automatically in Passport 12+
 
         Horizon::auth(function () {
             return Gate::allows('horizon');

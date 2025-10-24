@@ -21,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
             return new CostCalculator($config['price']);
         });
 
-        Passport::ignoreMigrations();
+        // Passport migrations are now published and can be run with php artisan migrate
     }
 }

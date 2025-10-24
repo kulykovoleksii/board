@@ -12,7 +12,7 @@ use App\Http\Requests\Banner\FileRequest;
 use App\Http\Requests\Banner\RejectRequest;
 use App\Services\Banner\CostCalculator;
 use Carbon\Carbon;
-use Elasticsearch\Client;
+use Elastic\Elasticsearch\Client;
 use Illuminate\Support\Facades\Storage;
 
 class BannerService

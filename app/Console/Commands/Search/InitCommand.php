@@ -4,7 +4,7 @@ namespace App\Console\Commands\Search;
 
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Illuminate\Console\Command;
-use Elasticsearch\Client;
+use Elastic\Elasticsearch\Client;
 
 class InitCommand extends Command
 {

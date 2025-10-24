@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Elasticsearch\Client;
-use Elasticsearch\ClientBuilder;
+use Elastic\Elasticsearch\Client;
+use Elastic\Elasticsearch\ClientBuilder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,7 +15,6 @@ class SearchServiceProvider extends ServiceProvider
             $config = $app->make('config')->get('elasticsearch');
             return ClientBuilder::create()
                 ->setHosts($config['hosts'])
-                ->setRetries($config['retries'])
                 ->build();
         });
     }

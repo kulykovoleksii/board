@@ -6,7 +6,7 @@ use App\Entity\Adverts\Advert\Advert;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
 use App\Http\Requests\Adverts\SearchRequest;
-use Elasticsearch\Client;
+use Elastic\Elasticsearch\Client;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Pagination\LengthAwarePaginator;
 
