@@ -18,7 +18,14 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Region extends Model
 {
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+
     protected $fillable = ['name', 'slug', 'parent_id'];
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\RegionFactory::new();
+    }
 
     public function getPath(): string
     {

@@ -31,10 +31,15 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, \Illuminate\Database\Eloquent\Factories\HasFactory;
 
     public const STATUS_WAIT = 'wait';
     public const STATUS_ACTIVE = 'active';
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\UserFactory::new();
+    }
 
     public const ROLE_USER = 'user';
     public const ROLE_MODERATOR = 'moderator';

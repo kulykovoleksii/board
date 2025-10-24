@@ -1,13 +1,20 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+use App\Entity\Adverts\Category;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(App\Entity\Adverts\Category::class, function (Faker $faker) {
-    return [
-        'name' => $faker->unique()->name,
-        'slug' => $faker->unique()->slug(2),
-        'parent_id' => null,
-    ];
-});
+class AdvertsCategoryFactory extends Factory
+{
+    protected $model = Category::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->unique()->name,
+            'slug' => $this->faker->unique()->slug(2),
+            'parent_id' => null,
+        ];
+    }
+}

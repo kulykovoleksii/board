@@ -1,13 +1,20 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+use App\Entity\Region;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(\App\Entity\Region::class, function (Faker $faker) {
-    return [
-        'name' => $faker->unique()->city,
-        'slug' => $faker->unique()->slug(2),
-        'parent_id' => null,
-    ];
-});
+class RegionFactory extends Factory
+{
+    protected $model = Region::class;
+
+    public function definition(): array
+    {
+        return [
+            'name' => $this->faker->unique()->city,
+            'slug' => $this->faker->unique()->slug(2),
+            'parent_id' => null,
+        ];
+    }
+}

@@ -56,7 +56,7 @@ class AdvertsPath implements UrlRoutable
         return 'adverts_path';
     }
 
-    public function resolveRouteBinding($value)
+    public function resolveRouteBinding($value, $field = null)
     {
         $chunks = explode('/', $value);
 
@@ -87,5 +87,11 @@ class AdvertsPath implements UrlRoutable
         return $this
             ->withRegion($region)
             ->withCategory($category);
+    }
+
+    public function resolveChildRouteBinding($childType, $value, $field)
+    {
+        // Not used for this router
+        return null;
     }
 }

@@ -6,15 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Entity\User\User;
 use App\Services\Sms\SmsSender;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class LoginController extends Controller
 {
-    use ThrottlesLogins;
 
     private $sms;
 
@@ -117,5 +117,42 @@ class LoginController extends Controller
     protected function username()
     {
         return 'email';
+    }
+
+    protected function hasTooManyLoginAttempts(Request $request)
+    {
+        return RateLimiter::tooManyAttempts($this->throttleKey($request), 5);
+    }
+
+    protected function incrementLoginAttempts(Request $request)
+    {
+        RateLimiter::hit($this->throttleKey($request), 60);
+    }
+
+    protected function clearLoginAttempts(Request $request)
+    {
+        RateLimiter::clear($this->throttleKey($request));
+    }
+
+    protected function throttleKey(Request $request)
+    {
+        return Str::transliterate(Str::lower($request->input($this->username())).'|'.$request->ip());
+    }
+
+    protected function sendLockoutResponse(Request $request)
+    {
+        $seconds = RateLimiter::availableIn($this->throttleKey($request));
+
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ])],
+        ]);
+    }
+
+    protected function fireLockoutEvent(Request $request)
+    {
+        // You can dispatch an event here if needed
     }
 }

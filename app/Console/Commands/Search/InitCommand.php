@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\Search;
 
-use Elasticsearch\Common\Exceptions\Missing404Exception;
+use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Illuminate\Console\Command;
-use Elasticsearch\Client;
+use Elastic\Elasticsearch\Client;
 
 class InitCommand extends Command
 {
@@ -18,12 +18,15 @@ class InitCommand extends Command
         $this->client = $client;
     }
     
-    public function handle(): bool
+    public function handle(): int
     {
         $this->initAdverts();
-        $this->initBanners();
+        $this->info('Adverts index created');
 
-        return true;
+        $this->initBanners();
+        $this->info('Banners index created');
+
+        return 0;
     }
 
     private function initAdverts(): void
@@ -32,18 +35,17 @@ class InitCommand extends Command
             $this->client->indices()->delete([
                 'index' => 'adverts'
             ]);
-        } catch (Missing404Exception $e) {
+        } catch (ClientResponseException $e) {
         }
 
         $this->client->indices()->create([
             'index' => 'adverts',
             'body' => [
                 'mappings' => [
-                    'advert' => [
-                        '_source' => [
-                            'enabled' => true,
-                        ],
-                        'properties' => [
+                    '_source' => [
+                        'enabled' => true,
+                    ],
+                    'properties' => [
                             'id' => [
                                 'type' => 'integer',
                             ],
@@ -84,8 +86,8 @@ class InitCommand extends Command
                             ],
                         ],
                     ],
-                ],
                 'settings' => [
+                    'max_ngram_diff' => 3,
                     'analysis' => [
                         'char_filter' => [
                             'replace' => [
@@ -139,33 +141,31 @@ class InitCommand extends Command
             $this->client->indices()->delete([
                 'index' => 'banners'
             ]);
-        } catch (Missing404Exception $e) {
+        } catch (ClientResponseException $e) {
         }
 
         $this->client->indices()->create([
             'index' => 'banners',
             'body' => [
                 'mappings' => [
-                    'banner' => [
-                        '_source' => [
-                            'enabled' => true,
+                    '_source' => [
+                        'enabled' => true,
+                    ],
+                    'properties' => [
+                        'id' => [
+                            'type' => 'integer',
                         ],
-                        'properties' => [
-                            'id' => [
-                                'type' => 'integer',
-                            ],
-                            'status' => [
-                                'type' => 'keyword',
-                            ],
-                            'format' => [
-                                'type' => 'keyword',
-                            ],
-                            'categories' => [
-                                'type' => 'integer',
-                            ],
-                            'regions' => [
-                                'type' => 'integer',
-                            ],
+                        'status' => [
+                            'type' => 'keyword',
+                        ],
+                        'format' => [
+                            'type' => 'keyword',
+                        ],
+                        'categories' => [
+                            'type' => 'integer',
+                        ],
+                        'regions' => [
+                            'type' => 'integer',
                         ],
                     ],
                 ],

@@ -4,7 +4,7 @@ namespace App\Services\Search;
 
 use App\Entity\Adverts\Advert\Advert;
 use App\Entity\Adverts\Advert\Value;
-use Elasticsearch\Client;
+use Elastic\Elasticsearch\Client;
 
 class AdvertIndexer
 {

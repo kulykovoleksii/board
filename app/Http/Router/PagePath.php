@@ -36,7 +36,7 @@ class PagePath implements UrlRoutable
         return 'page_path';
     }
 
-    public function resolveRouteBinding($value)
+    public function resolveRouteBinding($value, $field = null)
     {
         $chunks = explode('/', $value);
 
@@ -56,5 +56,11 @@ class PagePath implements UrlRoutable
 
         return $this
             ->withPage($page);
+    }
+
+    public function resolveChildRouteBinding($childType, $value, $field)
+    {
+        // Not used for this router
+        return null;
     }
 }

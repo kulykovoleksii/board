@@ -22,20 +22,24 @@ class ReindexCommand extends Command
         $this->banners = $banners;
     }
     
-    public function handle(): bool
+    public function handle(): int
     {
         $this->adverts->clear();
+        $this->info('Cleared adverts index');
 
         foreach (Advert::active()->orderBy('id')->cursor() as $advert) {
             $this->adverts->index($advert);
         }
+        $this->info('Reindexed adverts');
 
         $this->banners->clear();
+        $this->info('Cleared banners index');
 
         foreach (Banner::active()->orderBy('id')->cursor() as $banner) {
             $this->banners->index($banner);
         }
+        $this->info('Reindexed banners');
 
-        return true;
+        return 0;
     }
 }
