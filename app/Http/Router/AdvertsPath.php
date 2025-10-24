@@ -56,7 +56,7 @@ class AdvertsPath implements UrlRoutable
         return 'adverts_path';
     }
 
-    public function resolveRouteBinding($value)
+    public function resolveRouteBinding($value, $field = null)
     {
         $chunks = explode('/', $value);
 

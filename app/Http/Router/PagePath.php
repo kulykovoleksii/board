@@ -36,7 +36,7 @@ class PagePath implements UrlRoutable
         return 'page_path';
     }
 
-    public function resolveRouteBinding($value)
+    public function resolveRouteBinding($value, $field = null)
     {
         $chunks = explode('/', $value);
 
