@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Entity\Adverts\Advert\Advert;
 use App\Entity\Banner\Banner;
+use App\Entity\Course\Course;
 use App\Entity\Ticket\Ticket;
 use App\Entity\User\User;
 use Illuminate\Support\Facades\Gate;
@@ -67,6 +68,14 @@ class AuthServiceProvider extends ServiceProvider
             return $user->isAdmin() || $user->isModerator();
         });
 
+        Gate::define('manage-courses', function (User $user) {
+            return $user->isAdmin() || $user->isModerator();
+        });
+
+        Gate::define('instruct-courses', function (User $user) {
+            return $user->isInstructor() || $user->isAdmin();
+        });
+
         Gate::define('show-advert', function (User $user, Advert $advert) {
             return $user->isAdmin() || $user->isModerator() || $advert->user_id === $user->id;
         });
@@ -81,6 +90,14 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('manage-own-ticket', function (User $user, Ticket $ticket) {
             return $ticket->user_id === $user->id;
+        });
+
+        Gate::define('manage-own-course', function (User $user, Course $course) {
+            return $course->instructor_id === $user->id;
+        });
+
+        Gate::define('view-course', function (User $user, Course $course) {
+            return $course->isPublished() || $user->isAdmin() || $course->instructor_id === $user->id;
         });
     }
 }

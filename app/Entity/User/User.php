@@ -42,6 +42,8 @@ class User extends Authenticatable
     }
 
     public const ROLE_USER = 'user';
+    public const ROLE_STUDENT = 'student';
+    public const ROLE_INSTRUCTOR = 'instructor';
     public const ROLE_MODERATOR = 'moderator';
     public const ROLE_ADMIN = 'admin';
 
@@ -63,6 +65,8 @@ class User extends Authenticatable
     {
         return [
             self::ROLE_USER => 'User',
+            self::ROLE_STUDENT => 'Student',
+            self::ROLE_INSTRUCTOR => 'Instructor',
             self::ROLE_MODERATOR => 'Moderator',
             self::ROLE_ADMIN => 'Admin',
         ];
@@ -223,6 +227,16 @@ class User extends Authenticatable
         return $this->role === self::ROLE_ADMIN;
     }
 
+    public function isStudent(): bool
+    {
+        return $this->role === self::ROLE_STUDENT;
+    }
+
+    public function isInstructor(): bool
+    {
+        return $this->role === self::ROLE_INSTRUCTOR;
+    }
+
     public function isPhoneVerified(): bool
     {
         return $this->phone_verified;
@@ -246,6 +260,24 @@ class User extends Authenticatable
     public function networks()
     {
         return $this->hasMany(Network::class, 'user_id', 'id');
+    }
+
+    // Course relationships
+    public function instructedCourses()
+    {
+        return $this->hasMany(\App\Entity\Course\Course::class, 'instructor_id');
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(\App\Entity\Course\CourseEnrollment::class, 'student_id');
+    }
+
+    public function enrolledCourses()
+    {
+        return $this->belongsToMany(\App\Entity\Course\Course::class, 'course_enrollments', 'student_id', 'course_id')
+            ->withPivot(['enrolled_at', 'completed_at', 'progress_percentage', 'status'])
+            ->withTimestamps();
     }
 
     public function scopeByNetwork(Builder $query, string $network, string $identity): Builder
