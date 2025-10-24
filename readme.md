@@ -1,7 +1,7 @@
-# 🎓 Educational Platform (Board)
+# 🎓 EduPlatform
 
 > **Full-stack educational platform built with Laravel 11**
-> Transforming from a classifieds board into a comprehensive online learning management system
+> Comprehensive online learning management system for instructors and students
 
 [![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat&logo=laravel)](https://laravel.com)
 [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat&logo=php)](https://php.net)
@@ -32,7 +32,7 @@
 
 ## 🎯 About
 
-Educational Platform is a feature-rich learning management system that enables instructors to create and manage courses, while students can enroll, track progress, and earn certificates. The platform supports multilingual content (Ukrainian/English), advanced search capabilities, and comprehensive user management.
+EduPlatform is a feature-rich learning management system that enables instructors to create and manage courses, while students can enroll, track progress, and earn certificates. The platform supports multilingual content (Ukrainian/English), advanced search capabilities, and comprehensive user management.
 
 **Project Status:** 🚧 Active Development
 
@@ -138,7 +138,7 @@ Educational Platform is a feature-rich learning management system that enables i
 
 ```bash
 git clone <repository-url>
-cd board
+cd eduplatform
 ```
 
 ### 2. Copy Environment File
@@ -152,7 +152,7 @@ cp .env.example .env
 Edit `.env` file with your settings:
 
 ```env
-APP_NAME="Educational Platform"
+APP_NAME=EduPlatform
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost:8080
@@ -376,7 +376,7 @@ php artisan tinker                    # Interactive shell
 ## 📁 Project Structure
 
 ```
-board/
+eduplatform/
 ├── app/
 │   ├── Console/              # Artisan commands
 │   ├── Entity/               # Domain models

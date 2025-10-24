@@ -1,4 +1,7 @@
 {
+    "name": "eduplatform",
+    "version": "1.0.0",
+    "description": "Educational Platform - Online Learning Management System",
     "private": true,
     "scripts": {
         "dev": "npm run development",

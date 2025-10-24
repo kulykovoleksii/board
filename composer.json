@@ -1,8 +1,11 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
+    "name": "eduplatform/eduplatform",
+    "description": "Educational Platform - Full-stack online learning management system",
     "keywords": [
-        "framework",
+        "education",
+        "learning",
+        "courses",
+        "lms",
         "laravel"
     ],
     "license": "MIT",
