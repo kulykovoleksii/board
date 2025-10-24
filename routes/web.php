@@ -82,20 +82,17 @@ Route::group([
 
 Route::group(
     [
+        'prefix' => 'cabinet',
+        'as' => 'cabinet.',
         'middleware' => ['auth'],
     ],
     function () {
-        Route::group([
-            'prefix' => 'cabinet',
-            'as' => 'cabinet.',
-        ], function () {
-            Route::get('/profile', [ProfileController::class, 'index'])->name('profile.home');
-            Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-            Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.home');
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
 
-            Route::post('/phone/verify', [PhoneController::class, 'verify'])->name('phone.verify');
-            Route::post('/phone/auth', [PhoneController::class, 'auth'])->name('phone.auth');
-        });
+        Route::post('/phone/verify', [PhoneController::class, 'verify'])->name('phone.verify');
+        Route::post('/phone/auth', [PhoneController::class, 'auth'])->name('phone.auth');
 
         Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites.index');
         Route::delete('favorites/{advert}', [FavoriteController::class, 'remove'])->name('favorites.remove');
@@ -105,7 +102,7 @@ Route::group(
 
         Route::group([
             'prefix' => 'adverts',
-            'as' => 'cabinet.adverts.',
+            'as' => 'adverts.',
             'middleware' => [App\Http\Middleware\FilledProfile::class],
         ], function () {
             Route::get('/', [CabinetAdvertController::class, 'index'])->name('index');
@@ -127,7 +124,7 @@ Route::group(
 
         Route::group([
             'prefix' => 'banners',
-            'as' => 'cabinet.banners.',
+            'as' => 'banners.',
             'middleware' => [App\Http\Middleware\FilledProfile::class],
         ], function () {
             Route::get('/', [BannerController::class, 'index'])->name('index');

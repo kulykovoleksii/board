@@ -88,4 +88,10 @@ class AdvertsPath implements UrlRoutable
             ->withRegion($region)
             ->withCategory($category);
     }
+
+    public function resolveChildRouteBinding($childType, $value, $field)
+    {
+        // Not used for this router
+        return null;
+    }
 }
