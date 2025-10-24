@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\Sms\ArraySender;
 use App\Services\Sms\SmsRu;
 use App\Services\Sms\SmsSender;
+use App\Services\Sms\TwilioSender;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,6 +17,13 @@ class SmsServiceProvider extends ServiceProvider
             $config = $app->make('config')->get('sms');
 
             switch ($config['driver']) {
+                case 'twilio':
+                    $params = $config['drivers']['twilio'];
+                    return new TwilioSender(
+                        $params['account_sid'],
+                        $params['auth_token'],
+                        $params['from_number']
+                    );
                 case 'sms.ru':
                     $params = $config['drivers']['sms.ru'];
                     if (!empty($params['url'])) {
