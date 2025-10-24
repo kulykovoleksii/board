@@ -18,11 +18,16 @@ use Kalnoy\Nestedset\NodeTrait;
  */
 class Category extends Model
 {
-    use NodeTrait;
+    use NodeTrait, \Illuminate\Database\Eloquent\Factories\HasFactory;
 
     protected $table = 'advert_categories';
 
     public $timestamps = false;
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\AdvertsCategoryFactory::new();
+    }
 
     protected $fillable = ['name', 'slug', 'parent_id'];
 
