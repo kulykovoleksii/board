@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Auth\NetworkController;
+use App\Http\Controllers\Cabinet\HomeController as CabinetHomeController;
 use App\Http\Controllers\Cabinet\ProfileController;
 use App\Http\Controllers\Cabinet\PhoneController;
 use App\Http\Controllers\Cabinet\FavoriteController;
@@ -87,6 +88,8 @@ Route::group(
         'middleware' => ['auth'],
     ],
     function () {
+        Route::get('/', [CabinetHomeController::class, 'index'])->name('home');
+
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile.home');
         Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
