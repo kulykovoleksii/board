@@ -12,7 +12,7 @@ class RoleTest extends TestCase
 
     public function testChange(): void
     {
-        $user = factory(User::class)->create(['role' => User::ROLE_USER]);
+        $user = User::factory()->create(['role' => User::ROLE_USER]);
 
         self::assertFalse($user->isAdmin());
 
@@ -23,7 +23,7 @@ class RoleTest extends TestCase
 
     public function testAlready(): void
     {
-        $user = factory(User::class)->create(['role' => User::ROLE_ADMIN]);
+        $user = User::factory()->create(['role' => User::ROLE_ADMIN]);
 
         $this->expectExceptionMessage('Role is already assigned.');
 

@@ -33,13 +33,13 @@ class RegisterTest extends TestCase
 
     public function testSuccess(): void
     {
-        $user = factory(User::class)->make();
+        $user = User::factory()->make();
 
         $response = $this->post('/register', [
             'name' => $user->name,
             'email' => $user->email,
-            'password' => 'secret',
-            'password_confirmation' => 'secret',
+            'password' => 'password',
+            'password_confirmation' => 'password',
         ]);
 
         $response
@@ -50,7 +50,7 @@ class RegisterTest extends TestCase
 
     public function testVerifyIncorrect(): void
     {
-        $response = $this->get('/verify/' . Str::uuid());
+        $response = $this->get('/register/verify/' . Str::uuid());
 
         $response
             ->assertStatus(302)
@@ -60,12 +60,12 @@ class RegisterTest extends TestCase
 
     public function testVerify(): void
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'status' => User::STATUS_WAIT,
             'verify_token' => Str::uuid(),
         ]);
 
-        $response = $this->get('/verify/' . $user->verify_token);
+        $response = $this->get('/register/verify/' . $user->verify_token);
 
         $response
             ->assertStatus(302)

@@ -13,7 +13,7 @@ class PhoneTest extends TestCase
 
     public function testDefault(): void
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'phone' => null,
             'phone_verified' => false,
             'phone_verify_token' => null,
@@ -25,7 +25,7 @@ class PhoneTest extends TestCase
     public function testRequestEmptyPhone(): void
     {
         /** @var User $user */
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'phone' => null,
             'phone_verified' => false,
             'phone_verify_token' => null,
@@ -38,7 +38,7 @@ class PhoneTest extends TestCase
     public function testRequest(): void
     {
         /** @var User $user */
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'phone' => '79000000000',
             'phone_verified' => false,
             'phone_verify_token' => null,
@@ -53,7 +53,7 @@ class PhoneTest extends TestCase
     public function testRequestWithOldPhone(): void
     {
         /** @var User $user */
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'phone' => '79000000000',
             'phone_verified' => true,
             'phone_verify_token' => null,
@@ -70,7 +70,7 @@ class PhoneTest extends TestCase
     public function testRequestAlreadySentTimeout(): void
     {
         /** @var User $user */
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'phone' => '79000000000',
             'phone_verified' => true,
             'phone_verify_token' => null,
@@ -85,7 +85,7 @@ class PhoneTest extends TestCase
     public function testRequestAlreadySent(): void
     {
         /** @var User $user */
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'phone' => '79000000000',
             'phone_verified' => true,
             'phone_verify_token' => null,
@@ -100,7 +100,7 @@ class PhoneTest extends TestCase
     public function testVerify(): void
     {
         /** @var User $user */
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'phone' => '79000000000',
             'phone_verified' => false,
             'phone_verify_token' => $token = 'token',
@@ -117,7 +117,7 @@ class PhoneTest extends TestCase
     public function testVerifyIncorrectToken(): void
     {
         /** @var User $user */
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'phone' => '79000000000',
             'phone_verified' => false,
             'phone_verify_token' => 'token',
@@ -131,7 +131,7 @@ class PhoneTest extends TestCase
     public function testVerifyExpiredToken(): void
     {
         /** @var User $user */
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'phone' => '79000000000',
             'phone_verified' => false,
             'phone_verify_token' => $token = 'token',

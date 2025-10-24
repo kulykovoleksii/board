@@ -30,7 +30,7 @@ class LoginTest extends TestCase
 
     public function testWait(): void
     {
-        $user = factory(User::class)->create(['status' => User::STATUS_WAIT]);
+        $user = User::factory()->create(['status' => User::STATUS_WAIT]);
 
         $response = $this->post('/login', [
             'email' => $user->email,
@@ -45,7 +45,7 @@ class LoginTest extends TestCase
 
     public function testActive(): void
     {
-        $user = factory(User::class)->create(['status' => User::STATUS_ACTIVE]);
+        $user = User::factory()->create(['status' => User::STATUS_ACTIVE]);
 
         $response = $this->post('/login', [
             'email' => $user->email,
