@@ -321,8 +321,13 @@ make docker-up          # Start containers
 make docker-down        # Stop containers
 make docker-build       # Build and start containers
 
-# Development
+# Testing
 make test               # Run PHPUnit tests
+make test-setup         # Create test database and run migrations (first time)
+make test-refresh       # Refresh test database (drop all tables and re-migrate)
+make test-coverage      # Run tests with HTML coverage report
+
+# Development
 make perm               # Fix permissions
 
 # Frontend Assets
@@ -499,6 +504,18 @@ After running seeders, you can login with these accounts:
 
 ### Running Tests
 
+The project uses a separate MySQL database (`app_testing`) for tests to ensure complete isolation from development data.
+
+**First-time setup:**
+```bash
+# Create test database (only needed once)
+docker-compose exec mysql mysql -uroot -psecret -e "CREATE DATABASE IF NOT EXISTS app_testing CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON app_testing.* TO 'app'@'%'; FLUSH PRIVILEGES;"
+
+# Run migrations for test database
+docker-compose exec php-cli php artisan migrate --database=mysql --env=testing --force
+```
+
+**Running tests:**
 ```bash
 # Run all tests
 make test
@@ -508,7 +525,21 @@ docker-compose exec php-cli vendor/bin/phpunit
 
 # Run specific test
 docker-compose exec php-cli vendor/bin/phpunit --filter=CourseTest
+
+# Run with coverage
+docker-compose exec php-cli vendor/bin/phpunit --coverage-html coverage
+
+# Run specific test suite
+docker-compose exec php-cli vendor/bin/phpunit --testsuite=Feature
+docker-compose exec php-cli vendor/bin/phpunit --testsuite=Unit
 ```
+
+**Test configuration:**
+- Database: `app_testing` (separate MySQL database)
+- Cache/Session: `array` drivers (in-memory)
+- Queue: `sync` (synchronous)
+- Mail/SMS: `array` drivers (no actual sending)
+- Config: `phpunit.xml` and `.env.testing`
 
 ### Code Style
 

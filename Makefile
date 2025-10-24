@@ -10,6 +10,16 @@ docker-build: memory
 test:
 	docker-compose exec php-cli vendor/bin/phpunit
 
+test-coverage:
+	docker-compose exec php-cli vendor/bin/phpunit --coverage-html coverage
+
+test-setup:
+	docker-compose exec mysql mysql -uroot -psecret -e "CREATE DATABASE IF NOT EXISTS app_testing CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON app_testing.* TO 'app'@'%'; FLUSH PRIVILEGES;"
+	docker-compose exec php-cli php artisan migrate --database=mysql --env=testing --force
+
+test-refresh:
+	docker-compose exec php-cli php artisan migrate:fresh --database=mysql --env=testing --force
+
 assets-install:
 	docker-compose exec node yarn install
 

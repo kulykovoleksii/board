@@ -13,4 +13,5 @@ npm-debug.log
 yarn-error.log
 .env
 *.swp
-logs
+logs.phpunit.result.cache
+/logs
