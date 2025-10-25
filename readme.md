@@ -1,12 +1,15 @@
 # 🎓 EduPlatform
 
-> **Full-stack educational platform built with Laravel 11**
-> Comprehensive online learning management system for instructors and students
+> **Modern full-stack educational platform powered by React + Laravel**
+> SPA learning management system with Inertia.js for seamless UX
 
 [![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat&logo=laravel)](https://laravel.com)
+[![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev)
+[![Inertia](https://img.shields.io/badge/Inertia.js-2.x-9553E9?style=flat)](https://inertiajs.com)
+[![Vite](https://img.shields.io/badge/Vite-7.x-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev)
 [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat&logo=php)](https://php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql)](https://www.mysql.com)
-[![Elasticsearch](https://img.shields.io/badge/Elasticsearch-8.x-005571?style=flat&logo=elasticsearch)](https://www.elastic.co)
+[![Tailwind](https://img.shields.io/badge/Tailwind-4.x-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat&logo=docker)](https://www.docker.com)
 
 ---
@@ -101,9 +104,12 @@ EduPlatform is a feature-rich learning management system that enables instructor
 - **Authentication:** Laravel Passport (OAuth2)
 
 ### Frontend
-- **Build Tool:** Laravel Mix / Webpack
-- **Package Manager:** Yarn / NPM
-- **UI:** Blade Templates
+- **Framework:** React 19.x
+- **SPA Adapter:** Inertia.js 2.x (no API needed!)
+- **Build Tool:** Vite 7.x (Lightning-fast HMR)
+- **Styling:** Tailwind CSS 4.x
+- **Package Manager:** Yarn
+- **Legacy:** Blade Templates (for backward compatibility)
 
 ### DevOps
 - **Containerization:** Docker & Docker Compose
@@ -112,13 +118,21 @@ EduPlatform is a feature-rich learning management system that enables instructor
 - **Error Tracking:** Sentry
 
 ### Key Dependencies
+
+**Backend:**
 - `kalnoy/nestedset` - Nested set pattern for hierarchical data
 - `elasticsearch/elasticsearch` - Full-text search
 - `laravel/passport` - API authentication
 - `laravel/horizon` - Queue monitoring
 - `laravel/socialite` - Social authentication
 - `predis/predis` - Redis client
-- `davejamesmiller/laravel-breadcrumbs` - Navigation breadcrumbs
+- `inertiajs/inertia-laravel` - Server-side Inertia adapter
+
+**Frontend:**
+- `@inertiajs/react` - React adapter for Inertia.js
+- `react` & `react-dom` - React library
+- `@vitejs/plugin-react` - Vite plugin for React
+- `tailwindcss` - Utility-first CSS framework
 
 ---
 
@@ -240,14 +254,11 @@ make perm
 ### 12. Build Frontend Assets
 
 ```bash
-# Development build
-docker-compose exec node yarn run dev
-
-# Watch for changes
-make assets-watch
+# Development with Vite HMR (Hot Module Replacement)
+docker-compose exec node yarn dev
 
 # Production build
-docker-compose exec node yarn run production
+docker-compose exec node yarn build
 ```
 
 ### 13. Access the Application
