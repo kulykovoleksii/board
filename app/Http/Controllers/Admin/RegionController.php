@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Entity\Region;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class RegionController extends Controller
 {
@@ -17,7 +18,9 @@ class RegionController extends Controller
     {
         $regions = Region::where('parent_id', null)->orderBy('name')->get();
 
-        return view('admin.regions.index', compact('regions'));
+        return Inertia::render('Admin/Regions/Index', [
+            'regions' => $regions,
+        ]);
     }
 
     public function create(Request $request)
@@ -28,7 +31,9 @@ class RegionController extends Controller
             $parent = Region::findOrFail($request->get('parent'));
         }
 
-        return view('admin.regions.create', compact('parent'));
+        return Inertia::render('Admin/Regions/Create', [
+            'parent' => $parent,
+        ]);
     }
 
     public function store(Request $request)
@@ -45,19 +50,24 @@ class RegionController extends Controller
             'parent_id' => $request['parent'],
         ]);
 
-        return redirect()->route('admin.regions.show', $region);
+        return to_route('admin.regions.show', $region);
     }
 
     public function show(Region $region)
     {
         $regions = Region::where('parent_id', $region->id)->orderBy('name')->get();
 
-        return view('admin.regions.show', compact('region', 'regions'));
+        return Inertia::render('Admin/Regions/Show', [
+            'region' => $region,
+            'regions' => $regions,
+        ]);
     }
 
     public function edit(Region $region)
     {
-        return view('admin.regions.edit', compact('region'));
+        return Inertia::render('Admin/Regions/Edit', [
+            'region' => $region,
+        ]);
     }
 
     public function update(Request $request, Region $region)
@@ -72,13 +82,13 @@ class RegionController extends Controller
             'slug' => $request['slug'],
         ]);
 
-        return redirect()->route('admin.regions.show', $region);
+        return to_route('admin.regions.show', $region);
     }
 
     public function destroy(Region $region)
     {
         $region->delete();
 
-        return redirect()->route('admin.regions.index');
+        return to_route('admin.regions.index');
     }
 }
