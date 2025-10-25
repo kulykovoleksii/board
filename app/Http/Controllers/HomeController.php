@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
+use Inertia\Inertia;
 
 class HomeController extends Controller
 {
@@ -13,6 +14,9 @@ class HomeController extends Controller
 
         $categories = Category::whereIsRoot()->defaultOrder()->getModels();
 
-        return view('home', compact('regions', 'categories'));
+        return Inertia::render('Welcome', [
+            'regions' => $regions,
+            'categories' => $categories,
+        ]);
     }
 }
