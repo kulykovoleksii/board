@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Banner\CreateRequest;
 use App\UseCases\Banners\BannerService;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class CreateController extends Controller
 {
@@ -23,21 +24,31 @@ class CreateController extends Controller
     {
         $categories = Category::defaultOrder()->withDepth()->get()->toTree();
 
-        return view('cabinet.banners.create.category', compact('categories'));
+        return Inertia::render('Cabinet/Banners/Create/Category', [
+            'categories' => $categories,
+        ]);
     }
 
     public function region(Category $category, Region $region = null)
     {
         $regions = Region::where('parent_id', $region ? $region->id : null)->orderBy('name')->get();
 
-        return view('cabinet.banners.create.region', compact('category', 'region', 'regions'));
+        return Inertia::render('Cabinet/Banners/Create/Region', [
+            'category' => $category,
+            'region' => $region,
+            'regions' => $regions,
+        ]);
     }
 
     public function banner(Category $category, Region $region = null)
     {
         $formats = Banner::formatsList();
 
-        return view('cabinet.banners.create.banner', compact('category', 'region', 'formats'));
+        return Inertia::render('Cabinet/Banners/Create/Banner', [
+            'category' => $category,
+            'region' => $region,
+            'formats' => $formats,
+        ]);
     }
 
     public function store(CreateRequest $request, Category $category, Region $region = null)
@@ -53,6 +64,6 @@ class CreateController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('cabinet.banners.show', $banner);
+        return to_route('cabinet.banners.show', $banner);
     }
 }
