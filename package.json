@@ -2,12 +2,14 @@
     "name": "eduplatform",
     "version": "1.0.0",
     "description": "Educational Platform - Online Learning Management System",
+    "type": "module",
     "private": true,
     "scripts": {
         "dev": "vite",
         "build": "vite build"
     },
     "devDependencies": {
+        "@tailwindcss/postcss": "^4.1.16",
         "@vitejs/plugin-react": "^5.1.0",
         "autoprefixer": "^10.4.21",
         "laravel-vite-plugin": "^2.0.1",
