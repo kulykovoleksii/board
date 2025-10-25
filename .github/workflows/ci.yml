@@ -33,6 +33,11 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
+    - name: Configure environment
+      run: |
+        echo "SCOUT_DRIVER=null" >> .env
+        echo "ELASTICSEARCH_HOST=http://localhost:9200" >> .env
+
     - name: Install Composer Dependencies
       run: composer install --no-progress --prefer-dist --optimize-autoloader
 
@@ -41,6 +46,18 @@ jobs:
 
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
+
+    - name: Setup Node.js for Vite build
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install Node dependencies
+      run: npm ci
+
+    - name: Build assets
+      run: npm run build
 
     - name: Create Database
       run: |
@@ -96,6 +113,14 @@ jobs:
       with:
         php-version: '8.3'
         extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, json
+
+    - name: Copy .env
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+    - name: Configure environment
+      run: |
+        echo "SCOUT_DRIVER=null" >> .env
+        echo "ELASTICSEARCH_HOST=http://localhost:9200" >> .env
 
     - name: Install Composer Dependencies
       run: composer install --no-progress --prefer-dist --optimize-autoloader
