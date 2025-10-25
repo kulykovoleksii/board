@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Adverts;
 use App\Entity\Adverts\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
@@ -17,14 +18,18 @@ class CategoryController extends Controller
     {
         $categories = Category::defaultOrder()->withDepth()->get();
 
-        return view('admin.adverts.categories.index', compact('categories'));
+        return Inertia::render('Admin/Adverts/Categories/Index', [
+            'categories' => $categories,
+        ]);
     }
 
     public function create()
     {
         $parents = Category::defaultOrder()->withDepth()->get();
 
-        return view('admin.adverts.categories.create', compact('parents'));
+        return Inertia::render('Admin/Adverts/Categories/Create', [
+            'parents' => $parents,
+        ]);
     }
 
     public function store(Request $request)
@@ -41,7 +46,7 @@ class CategoryController extends Controller
             'parent_id' => $request['parent'],
         ]);
 
-        return redirect()->route('admin.adverts.categories.show', $category);
+        return to_route('admin.adverts.categories.show', $category);
     }
 
     public function show(Category $category)
@@ -49,14 +54,21 @@ class CategoryController extends Controller
         $parentAttributes = $category->parentAttributes();
         $attributes = $category->attributes()->orderBy('sort')->get();
 
-        return view('admin.adverts.categories.show', compact('category', 'attributes', 'parentAttributes'));
+        return Inertia::render('Admin/Adverts/Categories/Show', [
+            'category' => $category,
+            'attributes' => $attributes,
+            'parentAttributes' => $parentAttributes,
+        ]);
     }
 
     public function edit(Category $category)
     {
         $parents = Category::defaultOrder()->withDepth()->get();
 
-        return view('admin.adverts.categories.edit', compact('category', 'parents'));
+        return Inertia::render('Admin/Adverts/Categories/Edit', [
+            'category' => $category,
+            'parents' => $parents,
+        ]);
     }
 
     public function update(Request $request, Category $category)
@@ -73,7 +85,7 @@ class CategoryController extends Controller
             'parent_id' => $request['parent'],
         ]);
 
-        return redirect()->route('admin.adverts.categories.show', $category);
+        return to_route('admin.adverts.categories.show', $category);
     }
 
     public function first(Category $category)
@@ -82,21 +94,21 @@ class CategoryController extends Controller
             $category->insertBeforeNode($first);
         }
 
-        return redirect()->route('admin.adverts.categories.index');
+        return to_route('admin.adverts.categories.index');
     }
 
     public function up(Category $category)
     {
         $category->up();
 
-        return redirect()->route('admin.adverts.categories.index');
+        return to_route('admin.adverts.categories.index');
     }
 
     public function down(Category $category)
     {
         $category->down();
 
-        return redirect()->route('admin.adverts.categories.index');
+        return to_route('admin.adverts.categories.index');
     }
 
     public function last(Category $category)
@@ -105,13 +117,13 @@ class CategoryController extends Controller
             $category->insertAfterNode($last);
         }
 
-        return redirect()->route('admin.adverts.categories.index');
+        return to_route('admin.adverts.categories.index');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
 
-        return redirect()->route('admin.adverts.categories.index');
+        return to_route('admin.adverts.categories.index');
     }
 }
