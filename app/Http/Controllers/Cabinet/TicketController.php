@@ -9,6 +9,7 @@ use App\Http\Requests\Ticket\MessageRequest;
 use App\UseCases\Tickets\TicketService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
 
 class TicketController extends Controller
 {
@@ -21,19 +22,28 @@ class TicketController extends Controller
 
     public function index()
     {
-        $tickets = Ticket::forUser(Auth::user())->orderByDesc('updated_at')->paginate(20);
+        $tickets = Ticket::forUser(Auth::user())
+            ->with('messages')
+            ->orderByDesc('updated_at')
+            ->paginate(20);
 
-        return view('cabinet.tickets.index', compact('tickets'));
+        return Inertia::render('Cabinet/Tickets/Index', [
+            'tickets' => $tickets,
+        ]);
     }
 
     public function show(Ticket $ticket)
     {
-        return view('cabinet.tickets.show', compact('ticket'));
+        $ticket->load('user', 'messages');
+
+        return Inertia::render('Cabinet/Tickets/Show', [
+            'ticket' => $ticket,
+        ]);
     }
 
     public function create()
     {
-        return view('cabinet.tickets.create');
+        return Inertia::render('Cabinet/Tickets/Create');
     }
 
     public function store(CreateRequest $request)
@@ -44,7 +54,7 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('cabinet.tickets.show', $ticket);
+        return to_route('cabinet.tickets.show', $ticket);
     }
 
     public function message(MessageRequest $request, Ticket $ticket)
@@ -55,7 +65,7 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('cabinet.tickets.show', $ticket);
+        return to_route('cabinet.tickets.show', $ticket);
     }
 
     public function destroy(Ticket $ticket)
@@ -67,7 +77,7 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('cabinet.favorites.index');
+        return to_route('cabinet.tickets.index');
     }
 
     private function checkAccess(Ticket $ticket): void

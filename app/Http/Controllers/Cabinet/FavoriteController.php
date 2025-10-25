@@ -6,6 +6,7 @@ use App\Entity\Adverts\Advert\Advert;
 use App\Http\Controllers\Controller;
 use App\UseCases\Adverts\FavoriteService;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class FavoriteController extends Controller
 {
@@ -19,9 +20,14 @@ class FavoriteController extends Controller
 
     public function index()
     {
-        $adverts = Advert::favoredByUser(Auth::user())->orderByDesc('id')->paginate(20);
+        $adverts = Advert::favoredByUser(Auth::user())
+            ->with(['category', 'region', 'photos'])
+            ->orderByDesc('id')
+            ->paginate(20);
 
-        return view('cabinet.favorites.index', compact('adverts'));
+        return Inertia::render('Cabinet/Favorites/Index', [
+            'adverts' => $adverts,
+        ]);
     }
 
     public function remove(Advert $advert)
@@ -32,6 +38,6 @@ class FavoriteController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('cabinet.favorites.index');
+        return to_route('cabinet.favorites.index');
     }
 }
