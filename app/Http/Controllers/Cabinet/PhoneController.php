@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\PhoneVerifyRequest;
 use App\UseCases\Profile\PhoneService;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class PhoneController extends Controller
 {
@@ -29,9 +30,7 @@ class PhoneController extends Controller
 
     public function form()
     {
-        $user = Auth::user();
-
-        return view('cabinet.profile.phone', compact('user'));
+        return Inertia::render('Cabinet/Profile/Phone');
     }
 
     public function verify(PhoneVerifyRequest $request)
