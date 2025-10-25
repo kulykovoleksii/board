@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Cabinet;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\ProfileEditRequest;
+use App\Http\Requests\Cabinet\ProfileEditRequest;
 use App\UseCases\Profile\ProfileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
@@ -19,16 +20,12 @@ class ProfileController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
-
-        return view('cabinet.profile.home', compact('user'));
+        return Inertia::render('Cabinet/Profile/Index');
     }
 
     public function edit()
     {
-        $user = Auth::user();
-
-        return view('cabinet.profile.edit', compact('user'));
+        return Inertia::render('Cabinet/Profile/Edit');
     }
 
     public function update(ProfileEditRequest $request)
