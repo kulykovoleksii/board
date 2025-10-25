@@ -9,6 +9,7 @@ use App\Http\Requests\Banner\EditRequest;
 use App\Http\Requests\Banner\RejectRequest;
 use App\UseCases\Banners\BannerService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BannerController extends Controller
 {
@@ -22,7 +23,7 @@ class BannerController extends Controller
 
     public function index(Request $request)
     {
-        $query = Banner::orderByDesc('updated_at');
+        $query = Banner::with(['user', 'region', 'category'])->orderByDesc('updated_at');
 
         if (!empty($value = $request->get('id'))) {
             $query->where('id', $value);
@@ -48,17 +49,33 @@ class BannerController extends Controller
 
         $statuses = Banner::statusesList();
 
-        return view('admin.banners.index', compact('banners', 'statuses'));
+        return Inertia::render('Admin/Banners/Index', [
+            'banners' => $banners,
+            'statuses' => $statuses,
+            'filters' => [
+                'id' => $request->get('id'),
+                'user' => $request->get('user'),
+                'region' => $request->get('region'),
+                'category' => $request->get('category'),
+                'status' => $request->get('status'),
+            ],
+        ]);
     }
 
     public function show(Banner $banner)
     {
-        return view('admin.banners.show', compact('banner'));
+        $banner->load('category', 'region');
+
+        return Inertia::render('Admin/Banners/Show', [
+            'banner' => $banner,
+        ]);
     }
 
     public function editForm(Banner $banner)
     {
-        return view('admin.banners.edit', compact('banner'));
+        return Inertia::render('Admin/Banners/Edit', [
+            'banner' => $banner,
+        ]);
     }
 
     public function edit(EditRequest $request, Banner $banner)
@@ -69,7 +86,7 @@ class BannerController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.banners.show', $banner);
+        return to_route('admin.banners.show', $banner);
     }
 
     public function moderate(Banner $banner)
@@ -80,12 +97,14 @@ class BannerController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.banners.show', $banner);
+        return to_route('admin.banners.show', $banner);
     }
 
     public function rejectForm(Banner $banner)
     {
-        return view('admin.banners.reject', compact('banner'));
+        return Inertia::render('Admin/Banners/Reject', [
+            'banner' => $banner,
+        ]);
     }
 
     public function reject(RejectRequest $request, Banner $banner)
@@ -96,7 +115,7 @@ class BannerController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.banners.show', $banner);
+        return to_route('admin.banners.show', $banner);
     }
 
     public function pay(Banner $banner)
@@ -107,7 +126,7 @@ class BannerController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.banners.show', $banner);
+        return to_route('admin.banners.show', $banner);
     }
 
     public function destroy(Banner $banner)
@@ -118,6 +137,6 @@ class BannerController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.banners.index');
+        return to_route('admin.banners.index');
     }
 }
