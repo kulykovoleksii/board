@@ -130,6 +130,8 @@ jobs:
 
     - name: Check for debugger statements
       run: |
-        ! grep -r "dd(" app/ || (echo "Found dd() statements" && exit 1)
-        ! grep -r "dump(" app/ || (echo "Found dump() statements" && exit 1)
+        ! grep -rP '\bdd\(' app/ || (echo "Found dd() statements" && exit 1)
+        ! grep -rP '\bdump\(' app/ || (echo "Found dump() statements" && exit 1)
+        ! grep -rP '\bvar_dump\(' app/ || (echo "Found var_dump() statements" && exit 1)
+        ! grep -rP '\bprint_r\(' app/ || (echo "Found print_r() statements" && exit 1)
         echo "No debugger statements found"
