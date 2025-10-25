@@ -3,6 +3,7 @@
 > **Modern full-stack educational platform powered by React + Laravel**
 > SPA learning management system with Inertia.js for seamless UX
 
+[![CI](https://github.com/kulykovoleksii/board/actions/workflows/ci.yml/badge.svg)](https://github.com/kulykovoleksii/board/actions/workflows/ci.yml)
 [![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat&logo=laravel)](https://laravel.com)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev)
 [![Inertia](https://img.shields.io/badge/Inertia.js-2.x-9553E9?style=flat)](https://inertiajs.com)
