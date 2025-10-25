@@ -10,6 +10,7 @@ use App\Http\Requests\Ticket\MessageRequest;
 use App\UseCases\Tickets\TicketService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class TicketController extends Controller
 {
@@ -23,7 +24,7 @@ class TicketController extends Controller
 
     public function index(Request $request)
     {
-        $query = Ticket::orderByDesc('updated_at');
+        $query = Ticket::with('user')->orderByDesc('updated_at');
 
         if (!empty($value = $request->get('id'))) {
             $query->where('id', $value);
@@ -41,17 +42,31 @@ class TicketController extends Controller
 
         $statuses = Status::statusesList();
 
-        return view('admin.tickets.index', compact('tickets', 'statuses'));
+        return Inertia::render('Admin/Tickets/Index', [
+            'tickets' => $tickets,
+            'statuses' => $statuses,
+            'filters' => [
+                'id' => $request->get('id'),
+                'user' => $request->get('user'),
+                'status' => $request->get('status'),
+            ],
+        ]);
     }
 
     public function show(Ticket $ticket)
     {
-        return view('admin.tickets.show', compact('ticket'));
+        $ticket->load('user', 'messages.user', 'statuses.user');
+
+        return Inertia::render('Admin/Tickets/Show', [
+            'ticket' => $ticket,
+        ]);
     }
 
     public function editForm(Ticket $ticket)
     {
-        return view('admin.tickets.edit', compact('ticket'));
+        return Inertia::render('Admin/Tickets/Edit', [
+            'ticket' => $ticket,
+        ]);
     }
 
     public function edit(EditRequest $request, Ticket $ticket)
@@ -62,7 +77,7 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.tickets.show', $ticket);
+        return to_route('admin.tickets.show', $ticket);
     }
 
     public function message(MessageRequest $request, Ticket $ticket)
@@ -73,7 +88,7 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('cabinet.tickets.show', $ticket);
+        return to_route('admin.tickets.show', $ticket);
     }
 
 
@@ -85,7 +100,7 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.tickets.show', $ticket);
+        return to_route('admin.tickets.show', $ticket);
     }
 
     public function close(Ticket $ticket)
@@ -96,7 +111,7 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.tickets.show', $ticket);
+        return to_route('admin.tickets.show', $ticket);
     }
 
     public function reopen(Ticket $ticket)
@@ -107,7 +122,7 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.tickets.show', $ticket);
+        return to_route('admin.tickets.show', $ticket);
     }
 
     public function destroy(Ticket $ticket)
@@ -118,6 +133,6 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.tickets.index');
+        return to_route('admin.tickets.index');
     }
 }
