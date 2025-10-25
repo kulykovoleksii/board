@@ -9,6 +9,7 @@ use App\Http\Requests\Adverts\EditRequest;
 use App\Http\Requests\Adverts\PhotosRequest;
 use App\UseCases\Adverts\AdvertService;
 use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
 
 class ManageController extends Controller
 {
@@ -22,7 +23,9 @@ class ManageController extends Controller
     public function editForm(Advert $advert)
     {
         $this->checkAccess($advert);
-        return view('adverts.edit.advert', compact('advert'));
+        return Inertia::render('Cabinet/Adverts/Edit/Advert', [
+            'advert' => $advert,
+        ]);
     }
 
     public function edit(EditRequest $request, Advert $advert)
@@ -34,13 +37,16 @@ class ManageController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('adverts.show', $advert);
+        return to_route('adverts.show', $advert);
     }
 
     public function attributesForm(Advert $advert)
     {
         $this->checkAccess($advert);
-        return view('adverts.edit.attributes', compact('advert'));
+        $advert->load('category.attributes', 'values');
+        return Inertia::render('Cabinet/Adverts/Edit/Attributes', [
+            'advert' => $advert,
+        ]);
     }
 
     public function attributes(AttributesRequest $request, Advert $advert)
@@ -52,13 +58,16 @@ class ManageController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('adverts.show', $advert);
+        return to_route('adverts.show', $advert);
     }
 
     public function photosForm(Advert $advert)
     {
         $this->checkAccess($advert);
-        return view('adverts.edit.photos', compact('advert'));
+        $advert->load('photos');
+        return Inertia::render('Cabinet/Adverts/Edit/Photos', [
+            'advert' => $advert,
+        ]);
     }
 
     public function photos(PhotosRequest $request, Advert $advert)
@@ -70,7 +79,7 @@ class ManageController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('adverts.show', $advert);
+        return to_route('adverts.show', $advert);
     }
 
     public function send(Advert $advert)
@@ -82,7 +91,7 @@ class ManageController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('adverts.show', $advert);
+        return to_route('adverts.show', $advert);
     }
 
     public function close(Advert $advert)
@@ -94,7 +103,7 @@ class ManageController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('adverts.show', $advert);
+        return to_route('adverts.show', $advert);
     }
 
     public function destroy(Advert $advert)
@@ -106,7 +115,7 @@ class ManageController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('cabinet.adverts.index');
+        return to_route('cabinet.adverts.index');
     }
 
     private function checkAccess(Advert $advert): void
