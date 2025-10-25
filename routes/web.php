@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\BannerController as PublicBannerController;
 use App\Http\Controllers\Auth\LoginController;
@@ -34,6 +35,10 @@ use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\TicketController as AdminTicketController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Courses Routes
+Route::get('courses', [CourseController::class, 'index'])->name('courses.index');
+Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
 
 // Authentication Routes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
