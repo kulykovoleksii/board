@@ -57,12 +57,19 @@ class UsersController extends Controller
             'users' => $users,
             'statuses' => $statuses,
             'roles' => $roles,
+            'filters' => [
+                'id' => $request->get('id'),
+                'name' => $request->get('name'),
+                'email' => $request->get('email'),
+                'status' => $request->get('status'),
+                'role' => $request->get('role'),
+            ],
         ]);
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        return Inertia::render('Admin/Users/Create');
     }
 
     public function store(CreateRequest $request)
@@ -72,19 +79,24 @@ class UsersController extends Controller
             $request['email']
         );
 
-        return redirect()->route('admin.users.show', $user);
+        return to_route('admin.users.show', $user);
     }
 
     public function show(User $user)
     {
-        return view('admin.users.show', compact('user'));
+        return Inertia::render('Admin/Users/Show', [
+            'user' => $user,
+        ]);
     }
 
     public function edit(User $user)
     {
         $roles = User::rolesList();
 
-        return view('admin.users.edit', compact('user', 'roles'));
+        return Inertia::render('Admin/Users/Edit', [
+            'user' => $user,
+            'roles' => $roles,
+        ]);
     }
 
     public function update(UpdateRequest $request, User $user)
@@ -95,20 +107,20 @@ class UsersController extends Controller
             $user->changeRole($request['role']);
         }
 
-        return redirect()->route('admin.users.show', $user);
+        return to_route('admin.users.show', $user);
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return redirect()->route('admin.users.index');
+        return to_route('admin.users.index');
     }
 
     public function verify(User $user)
     {
         $this->register->verify($user->id);
 
-        return redirect()->route('admin.users.show', $user);
+        return to_route('admin.users.show', $user);
     }
 }
