@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Adverts\CreateRequest;
 use App\UseCases\Adverts\AdvertService;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class CreateController extends Controller
 {
@@ -22,19 +23,30 @@ class CreateController extends Controller
     {
         $categories = Category::defaultOrder()->withDepth()->get()->toTree();
 
-        return view('cabinet.adverts.create.category', compact('categories'));
+        return Inertia::render('Cabinet/Adverts/Create/Category', [
+            'categories' => $categories,
+        ]);
     }
 
     public function region(Category $category, Region $region = null)
     {
         $regions = Region::where('parent_id', $region ? $region->id : null)->orderBy('name')->get();
 
-        return view('cabinet.adverts.create.region', compact('category', 'region', 'regions'));
+        return Inertia::render('Cabinet/Adverts/Create/Region', [
+            'category' => $category,
+            'region' => $region,
+            'regions' => $regions,
+        ]);
     }
 
     public function advert(Category $category, Region $region = null)
     {
-        return view('cabinet.adverts.create.advert', compact('category', 'region'));
+        $category->load('allAttributes');
+
+        return Inertia::render('Cabinet/Adverts/Create/Advert', [
+            'category' => $category,
+            'region' => $region,
+        ]);
     }
 
     public function store(CreateRequest $request, Category $category, Region $region = null)
