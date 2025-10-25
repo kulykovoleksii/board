@@ -11,6 +11,7 @@ use App\Http\Requests\Adverts\PhotosRequest;
 use App\Http\Requests\Adverts\RejectRequest;
 use App\UseCases\Adverts\AdvertService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AdvertController extends Controller
 {
@@ -50,13 +51,11 @@ class AdvertController extends Controller
             $query->where('status', $value);
         }
 
-        $adverts = $query->paginate(20);
+        $adverts = $query->with(['user', 'category', 'region'])->paginate(20);
 
-        $statuses = Advert::statusesList();
-
-        $roles = User::rolesList();
-
-        return view('admin.adverts.adverts.index', compact('adverts', 'statuses', 'roles'));
+        return Inertia::render('Admin/Adverts/Index', [
+            'adverts' => $adverts,
+        ]);
     }
 
     public function editForm(Advert $advert)

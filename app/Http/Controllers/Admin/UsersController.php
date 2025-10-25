@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\Users\UpdateRequest;
 use App\Http\Controllers\Controller;
 use App\UseCases\Auth\RegisterService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class UsersController extends Controller
 {
@@ -52,7 +53,11 @@ class UsersController extends Controller
 
         $roles = User::rolesList();
 
-        return view('admin.users.index', compact('users', 'statuses', 'roles'));
+        return Inertia::render('Admin/Users/Index', [
+            'users' => $users,
+            'statuses' => $statuses,
+            'roles' => $roles,
+        ]);
     }
 
     public function create()
