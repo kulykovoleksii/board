@@ -7,6 +7,7 @@ use App\Entity\Adverts\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
 class AttributeController extends Controller
 {
@@ -19,7 +20,10 @@ class AttributeController extends Controller
     {
         $types = Attribute::typesList();
 
-        return view('admin.adverts.categories.attributes.create', compact('category', 'types'));
+        return Inertia::render('Admin/Adverts/Categories/Attributes/Create', [
+            'category' => $category,
+            'types' => $types,
+        ]);
     }
 
     public function store(Request $request, Category $category)
@@ -40,19 +44,26 @@ class AttributeController extends Controller
             'sort' => $request['sort'],
         ]);
 
-        return redirect()->route('admin.adverts.categories.attributes.show', [$category, $attribute]);
+        return to_route('admin.adverts.categories.attributes.show', [$category, $attribute]);
     }
 
     public function show(Category $category, Attribute $attribute)
     {
-        return view('admin.adverts.categories.attributes.show', compact('category', 'attribute'));
+        return Inertia::render('Admin/Adverts/Categories/Attributes/Show', [
+            'category' => $category,
+            'attribute' => $attribute,
+        ]);
     }
 
     public function edit(Category $category, Attribute $attribute)
     {
         $types = Attribute::typesList();
 
-        return view('admin.adverts.categories.attributes.edit', compact('category', 'attribute', 'types'));
+        return Inertia::render('Admin/Adverts/Categories/Attributes/Edit', [
+            'category' => $category,
+            'attribute' => $attribute,
+            'types' => $types,
+        ]);
     }
 
     public function update(Request $request, Category $category, Attribute $attribute)
@@ -73,13 +84,13 @@ class AttributeController extends Controller
             'sort' => $request['sort'],
         ]);
 
-        return redirect()->route('admin.adverts.categories.show', $category);
+        return to_route('admin.adverts.categories.show', $category);
     }
 
-    public function destroy(Category $category)
+    public function destroy(Category $category, Attribute $attribute)
     {
-        $category->delete();
+        $attribute->delete();
 
-        return redirect()->route('admin.adverts.categories.show', $category);
+        return to_route('admin.adverts.categories.show', $category);
     }
 }
