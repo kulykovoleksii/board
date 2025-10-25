@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Entity\Page;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Pages\PageRequest;
+use Inertia\Inertia;
 
 class PageController extends Controller
 {
@@ -17,14 +18,18 @@ class PageController extends Controller
     {
         $pages = Page::defaultOrder()->withDepth()->get();
 
-        return view('admin.pages.index', compact('pages'));
+        return Inertia::render('Admin/Pages/Index', [
+            'pages' => $pages,
+        ]);
     }
 
     public function create()
     {
         $parents = Page::defaultOrder()->withDepth()->get();
 
-        return view('admin.pages.create', compact('parents'));
+        return Inertia::render('Admin/Pages/Create', [
+            'parents' => $parents,
+        ]);
     }
 
     public function store(PageRequest $request)
@@ -38,19 +43,24 @@ class PageController extends Controller
             'description' => $request['description'],
         ]);
 
-        return redirect()->route('admin.pages.show', $page);
+        return to_route('admin.pages.show', $page);
     }
 
     public function show(Page $page)
     {
-        return view('admin.pages.show', compact('page'));
+        return Inertia::render('Admin/Pages/Show', [
+            'page' => $page,
+        ]);
     }
 
     public function edit(Page $page)
     {
         $parents = Page::defaultOrder()->withDepth()->get();
 
-        return view('admin.pages.edit', compact('page', 'parents'));
+        return Inertia::render('Admin/Pages/Edit', [
+            'page' => $page,
+            'parents' => $parents,
+        ]);
     }
 
     public function update(PageRequest $request, Page $page)
@@ -64,7 +74,7 @@ class PageController extends Controller
             'description' => $request['description'],
         ]);
 
-        return redirect()->route('admin.pages.show', $page);
+        return to_route('admin.pages.show', $page);
     }
 
     public function first(Page $page)
@@ -73,21 +83,21 @@ class PageController extends Controller
             $page->insertBeforeNode($first);
         }
 
-        return redirect()->route('admin.pages.index');
+        return to_route('admin.pages.index');
     }
 
     public function up(Page $page)
     {
         $page->up();
 
-        return redirect()->route('admin.pages.index');
+        return to_route('admin.pages.index');
     }
 
     public function down(Page $page)
     {
         $page->down();
 
-        return redirect()->route('admin.pages.index');
+        return to_route('admin.pages.index');
     }
 
     public function last(Page $page)
@@ -96,13 +106,13 @@ class PageController extends Controller
             $page->insertAfterNode($last);
         }
 
-        return redirect()->route('admin.pages.index');
+        return to_route('admin.pages.index');
     }
 
     public function destroy(Page $page)
     {
         $page->delete();
 
-        return redirect()->route('admin.pages.index');
+        return to_route('admin.pages.index');
     }
 }
