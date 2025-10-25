@@ -14,6 +14,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Inertia\Inertia;
 
 class AdvertController extends Controller
 {
@@ -49,12 +50,15 @@ class AdvertController extends Controller
             return isset($categoriesCounts[$category->id]) && $categoriesCounts[$category->id] > 0;
         });
 
-        return view('adverts.index', compact(
-            'category', 'region',
-            'categories', 'regions',
-            'regionsCounts', 'categoriesCounts',
-            'adverts'
-        ));
+        return Inertia::render('Adverts/Index', [
+            'category' => $category,
+            'region' => $region,
+            'categories' => array_values($categories),
+            'regions' => array_values($regions),
+            'regionsCounts' => $regionsCounts,
+            'categoriesCounts' => $categoriesCounts,
+            'adverts' => $adverts,
+        ]);
     }
 
     public function show(Advert $advert)
@@ -63,9 +67,19 @@ class AdvertController extends Controller
             abort(403);
         }
 
-        $user = Auth::user();
+        $advert->load('user', 'category', 'region', 'values.attribute', 'photos');
 
-        return view('adverts.show', compact('advert', 'user'));
+        // Check if in favorites
+        $isFavorite = false;
+        if ($user = Auth::user()) {
+            $isFavorite = $user->favorites()->where('advert_id', $advert->id)->exists();
+        }
+
+        return Inertia::render('Adverts/Show', [
+            'advert' => array_merge($advert->toArray(), [
+                'is_favorite' => $isFavorite,
+            ]),
+        ]);
     }
 
     public function phone(Advert $advert): string
