@@ -74,7 +74,7 @@ class LoginController extends Controller
 
     public function phone()
     {
-        return view('auth.phone');
+        return \Inertia\Inertia::render('Auth/Phone');
     }
 
     public function verify(Request $request)
