@@ -4,19 +4,16 @@ namespace App\UseCases\Auth;
 
 use App\Entity\User\User;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Mail\Auth\VerifyMail;
+use App\Jobs\SendVerificationEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Mail\Mailer;
 
 class RegisterService
 {
-    private $mailer;
     private $dispatcher;
 
-    public function __construct(Mailer $mailer, Dispatcher $dispatcher)
+    public function __construct(Dispatcher $dispatcher)
     {
-        $this->mailer = $mailer;
         $this->dispatcher = $dispatcher;
     }
 
@@ -28,7 +25,7 @@ class RegisterService
             $request['password']
         );
 
-        $this->mailer->to($user->email)->send(new VerifyMail($user));
+        SendVerificationEmail::dispatch($user);
         $this->dispatcher->dispatch(new Registered($user));
     }
 
