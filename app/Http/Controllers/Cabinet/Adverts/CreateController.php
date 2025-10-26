@@ -62,6 +62,6 @@ class CreateController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('adverts.show', $advert);
+        return to_route('adverts.show', $advert);
     }
 }
