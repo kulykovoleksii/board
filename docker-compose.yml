@@ -44,6 +44,24 @@ services:
             - "REDIS_HOST=redis"
             - "ELASTICSEARCH_HOSTS=elasticsearch:9200"
         tty: true
+    horizon:
+        build:
+            context: ./
+            dockerfile: docker/php-cli.docker
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - mysql
+            - redis
+            - elasticsearch
+        environment:
+            - "DB_PORT=3306"
+            - "DB_HOST=mysql"
+            - "REDIS_PORT=6379"
+            - "REDIS_HOST=redis"
+            - "ELASTICSEARCH_HOSTS=elasticsearch:9200"
+        command: php artisan horizon
+        restart: unless-stopped
     mysql:
         image: mysql:8.0
         command: --default-authentication-plugin=mysql_native_password
