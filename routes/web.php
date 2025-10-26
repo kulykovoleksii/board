@@ -33,6 +33,10 @@ use App\Http\Controllers\Admin\Adverts\AttributeController;
 use App\Http\Controllers\Admin\Adverts\AdvertController as AdminAdvertController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\TicketController as AdminTicketController;
+use App\Http\Controllers\Admin\Courses\CourseController as AdminCourseController;
+use App\Http\Controllers\Admin\Courses\ModuleController;
+use App\Http\Controllers\Admin\Courses\LessonController;
+use App\Http\Controllers\Admin\Courses\ContentController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -219,6 +223,36 @@ Route::group(
             Route::post('/{banner}/reject', [AdminBannerController::class, 'reject']);
             Route::post('/{banner}/pay', [AdminBannerController::class, 'pay'])->name('pay');
             Route::delete('/{banner}/destroy', [AdminBannerController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::group(['prefix' => 'courses', 'as' => 'courses.'], function () {
+            Route::get('/', [AdminCourseController::class, 'index'])->name('index');
+            Route::get('/create', [AdminCourseController::class, 'create'])->name('create');
+            Route::post('/', [AdminCourseController::class, 'store'])->name('store');
+            Route::get('/{course}', [AdminCourseController::class, 'show'])->name('show');
+            Route::get('/{course}/edit', [AdminCourseController::class, 'edit'])->name('edit');
+            Route::put('/{course}', [AdminCourseController::class, 'update'])->name('update');
+            Route::delete('/{course}', [AdminCourseController::class, 'destroy'])->name('destroy');
+            Route::post('/{course}/publish', [AdminCourseController::class, 'publish'])->name('publish');
+            Route::post('/{course}/unpublish', [AdminCourseController::class, 'unpublish'])->name('unpublish');
+
+            // Modules
+            Route::post('/{course}/modules', [ModuleController::class, 'store'])->name('modules.store');
+            Route::put('/{course}/modules/{module}', [ModuleController::class, 'update'])->name('modules.update');
+            Route::delete('/{course}/modules/{module}', [ModuleController::class, 'destroy'])->name('modules.destroy');
+            Route::post('/{course}/modules/{module}/reorder', [ModuleController::class, 'reorder'])->name('modules.reorder');
+
+            // Lessons
+            Route::post('/{course}/modules/{module}/lessons', [LessonController::class, 'store'])->name('lessons.store');
+            Route::put('/{course}/modules/{module}/lessons/{lesson}', [LessonController::class, 'update'])->name('lessons.update');
+            Route::delete('/{course}/modules/{module}/lessons/{lesson}', [LessonController::class, 'destroy'])->name('lessons.destroy');
+            Route::post('/{course}/modules/{module}/lessons/{lesson}/reorder', [LessonController::class, 'reorder'])->name('lessons.reorder');
+
+            // Lesson Content
+            Route::post('/{course}/lessons/{lesson}/contents', [ContentController::class, 'store'])->name('contents.store');
+            Route::put('/{course}/lessons/{lesson}/contents/{content}', [ContentController::class, 'update'])->name('contents.update');
+            Route::delete('/{course}/lessons/{lesson}/contents/{content}', [ContentController::class, 'destroy'])->name('contents.destroy');
+            Route::post('/{course}/lessons/{lesson}/contents/{content}/reorder', [ContentController::class, 'reorder'])->name('contents.reorder');
         });
 
         Route::group(['prefix' => 'tickets', 'as' => 'tickets.'], function () {

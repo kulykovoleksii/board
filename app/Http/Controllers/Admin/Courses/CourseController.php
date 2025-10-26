@@ -9,13 +9,10 @@ use App\Entity\User\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class CourseController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:manage-courses');
-    }
 
     public function index(Request $request)
     {
@@ -54,21 +51,37 @@ class CourseController extends Controller
             });
         }
 
-        $courses = $query->latest()->paginate(20);
+        $courses = $query->latest()->paginate(20)->withQueryString();
 
         $categories = CourseCategory::defaultOrder()->get();
-        $instructors = User::where('role', User::ROLE_INSTRUCTOR)->get();
+        $instructors = User::where('role', User::ROLE_ADMIN)
+            ->orWhere('role', User::ROLE_MODERATOR)
+            ->get();
 
-        return view('admin.courses.index', compact('courses', 'categories', 'instructors'));
+        return Inertia::render('Admin/Courses/Index', [
+            'courses' => $courses,
+            'categories' => $categories,
+            'instructors' => $instructors,
+            'filters' => $request->only(['status', 'category_id', 'level', 'instructor_id', 'search']),
+            'levels' => Course::levelsList(),
+        ]);
     }
 
     public function create()
     {
         $categories = CourseCategory::defaultOrder()->get();
-        $instructors = User::where('role', User::ROLE_INSTRUCTOR)->get();
+        $instructors = User::where('role', User::ROLE_ADMIN)
+            ->orWhere('role', User::ROLE_MODERATOR)
+            ->get();
         $tags = Tag::orderBy('name_en')->get();
 
-        return view('admin.courses.create', compact('categories', 'instructors', 'tags'));
+        return Inertia::render('Admin/Courses/Create', [
+            'categories' => $categories,
+            'instructors' => $instructors,
+            'tags' => $tags,
+            'levels' => Course::levelsList(),
+            'languages' => Course::languagesList(),
+        ]);
     }
 
     public function store(Request $request)
@@ -115,24 +128,45 @@ class CourseController extends Controller
             $course->syncTags($request->tags);
         }
 
-        return redirect()->route('admin.courses.show', $course)
-            ->with('success', 'Course created successfully');
+        return to_route('admin.courses.show', $course);
     }
 
     public function show(Course $course)
     {
-        $course->load(['instructor', 'category', 'tags', 'enrollments.student']);
+        $course->load([
+            'instructor',
+            'category',
+            'tags',
+            'enrollments.student',
+            'modules.lessons.contents'
+        ]);
 
-        return view('admin.courses.show', compact('course'));
+        return Inertia::render('Admin/Courses/Show', [
+            'course' => $course,
+            'stats' => [
+                'modules' => $course->modules()->count(),
+                'lessons' => $course->modules()->withCount('lessons')->get()->sum('lessons_count'),
+                'students' => $course->students_count,
+            ]
+        ]);
     }
 
     public function edit(Course $course)
     {
         $categories = CourseCategory::defaultOrder()->get();
-        $instructors = User::where('role', User::ROLE_INSTRUCTOR)->get();
+        $instructors = User::where('role', User::ROLE_ADMIN)
+            ->orWhere('role', User::ROLE_MODERATOR)
+            ->get();
         $tags = Tag::orderBy('name_en')->get();
 
-        return view('admin.courses.edit', compact('course', 'categories', 'instructors', 'tags'));
+        return Inertia::render('Admin/Courses/Edit', [
+            'course' => $course,
+            'categories' => $categories,
+            'instructors' => $instructors,
+            'tags' => $tags,
+            'levels' => Course::levelsList(),
+            'languages' => Course::languagesList(),
+        ]);
     }
 
     public function update(Request $request, Course $course)
@@ -179,31 +213,27 @@ class CourseController extends Controller
             $course->syncTags($request->tags ?? []);
         }
 
-        return redirect()->route('admin.courses.show', $course)
-            ->with('success', 'Course updated successfully');
+        return to_route('admin.courses.show', $course);
     }
 
     public function destroy(Course $course)
     {
         $course->delete();
 
-        return redirect()->route('admin.courses.index')
-            ->with('success', 'Course deleted successfully');
+        return to_route('admin.courses.index');
     }
 
     public function publish(Course $course)
     {
         $course->publish();
 
-        return redirect()->back()
-            ->with('success', 'Course published successfully');
+        return back();
     }
 
     public function unpublish(Course $course)
     {
         $course->unpublish();
 
-        return redirect()->back()
-            ->with('success', 'Course unpublished successfully');
+        return back();
     }
 }
