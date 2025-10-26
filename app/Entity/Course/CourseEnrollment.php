@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property User $student
  * @property Course $course
+ * @property CourseLessonProgress[] $lessonProgress
  */
 class CourseEnrollment extends Model
 {
@@ -199,6 +200,48 @@ class CourseEnrollment extends Model
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    /**
+     * Get lesson progress records for this enrollment
+     */
+    public function lessonProgress()
+    {
+        return $this->hasMany(CourseLessonProgress::class, 'enrollment_id');
+    }
+
+    /**
+     * Get progress for a specific lesson
+     */
+    public function getProgressForLesson(int $lessonId): ?CourseLessonProgress
+    {
+        return $this->lessonProgress()
+            ->where('lesson_id', $lessonId)
+            ->first();
+    }
+
+    /**
+     * Calculate overall progress based on completed lessons
+     */
+    public function recalculateProgress(): void
+    {
+        $totalLessons = $this->course->modules()
+            ->with('lessons')
+            ->get()
+            ->sum(function ($module) {
+                return $module->lessons->count();
+            });
+
+        if ($totalLessons === 0) {
+            return;
+        }
+
+        $completedLessons = $this->lessonProgress()
+            ->where('status', CourseLessonProgress::STATUS_COMPLETED)
+            ->count();
+
+        $percentage = (int) round(($completedLessons / $totalLessons) * 100);
+        $this->updateProgress($percentage);
     }
 
     /**

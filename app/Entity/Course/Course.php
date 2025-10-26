@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property User $instructor
  * @property CourseCategory|null $category
+ * @property CourseModule[] $modules
  */
 class Course extends Model
 {
@@ -204,6 +205,22 @@ class Course extends Model
     public function category()
     {
         return $this->belongsTo(CourseCategory::class, 'category_id');
+    }
+
+    /**
+     * Get course modules
+     */
+    public function modules()
+    {
+        return $this->hasMany(CourseModule::class, 'course_id')->orderBy('position');
+    }
+
+    /**
+     * Get published modules
+     */
+    public function publishedModules()
+    {
+        return $this->modules()->where('is_published', true);
     }
 
     /**

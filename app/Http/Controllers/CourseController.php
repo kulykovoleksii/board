@@ -20,10 +20,27 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        $course->load('category', 'enrollments');
+        $course->load([
+            'category',
+            'instructor',
+            'publishedModules.publishedLessons.contents' => function ($query) {
+                $query->orderBy('position');
+            }
+        ]);
+
+        // Get user enrollment if logged in
+        $enrollment = null;
+        if (auth()->check()) {
+            $enrollment = $course->enrollments()
+                ->where('student_id', auth()->id())
+                ->with('lessonProgress')
+                ->first();
+        }
 
         return Inertia::render('Courses/Show', [
             'course' => $course,
+            'enrollment' => $enrollment,
+            'isEnrolled' => $enrollment !== null,
         ]);
     }
 }
