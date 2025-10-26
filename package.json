@@ -19,6 +19,10 @@
     },
     "dependencies": {
         "@inertiajs/react": "^2.2.11",
+        "@tiptap/extension-image": "^3.8.0",
+        "@tiptap/extension-link": "^3.8.0",
+        "@tiptap/react": "^3.8.0",
+        "@tiptap/starter-kit": "^3.8.0",
         "axios": "^1.12.2",
         "react": "^19.2.0",
         "react-dom": "^19.2.0"

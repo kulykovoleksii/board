@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import AdminLayout from '../../../Layouts/AdminLayout';
-import { Button, Card, Input, PageHeader, Select, Textarea } from '../../../Components';
+import { Button, Card, Input, PageHeader, RichTextEditor, Select, Textarea } from '../../../Components';
 
 export default function Create({ parents }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -119,21 +119,13 @@ export default function Create({ parents }) {
                                 </p>
                             </div>
 
-                            <div>
-                                <Textarea
-                                    label="Content"
-                                    value={data.content}
-                                    onChange={(e) => setData('content', e.target.value)}
-                                    error={errors.content}
-                                    rows={15}
-                                    className="font-mono text-sm"
-                                    placeholder="Enter page content (HTML is supported)"
-                                    required
-                                />
-                                <p className="mt-2 text-sm text-gray-500">
-                                    Page content. HTML markup is supported.
-                                </p>
-                            </div>
+                            <RichTextEditor
+                                label="Content"
+                                value={data.content}
+                                onChange={(content) => setData('content', content)}
+                                error={errors.content}
+                                required
+                            />
                         </div>
                     </Card>
 
