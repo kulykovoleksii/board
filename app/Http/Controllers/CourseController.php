@@ -9,12 +9,53 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::with('category')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Course::query()
+            ->with('category')
+            ->published();
+
+        // Search filter
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title_en', 'like', "%{$search}%")
+                  ->orWhere('title_uk', 'like', "%{$search}%")
+                  ->orWhere('description_en', 'like', "%{$search}%")
+                  ->orWhere('description_uk', 'like', "%{$search}%");
+            });
+        }
+
+        // Category filter
+        if ($categoryId = request('category')) {
+            $query->byCategory($categoryId);
+        }
+
+        // Level filter
+        if ($level = request('level')) {
+            $query->byLevel($level);
+        }
+
+        // Price filter
+        if ($price = request('price')) {
+            if ($price === 'free') {
+                $query->free();
+            } elseif ($price === 'paid') {
+                $query->paid();
+            }
+        }
+
+        $courses = $query->orderBy('created_at', 'desc')->get();
+
+        // Get categories for filter dropdown
+        $categories = \App\Entity\Course\CourseCategory::orderBy('name_en')->get();
 
         return Inertia::render('Courses/Index', [
             'courses' => $courses,
+            'categories' => $categories,
+            'filters' => [
+                'search' => request('search'),
+                'category' => request('category'),
+                'level' => request('level'),
+                'price' => request('price'),
+            ],
         ]);
     }
 

@@ -1,7 +1,48 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 
-export default function Index({ courses = [] }) {
+export default function Index({ courses = [], categories = [], filters = {} }) {
+    const [search, setSearch] = useState(filters.search || '');
+    const [category, setCategory] = useState(filters.category || '');
+    const [level, setLevel] = useState(filters.level || '');
+    const [price, setPrice] = useState(filters.price || '');
+
+    // Debounce search input
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            applyFilters({ search, category, level, price });
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [search]);
+
+    const applyFilters = (filterValues) => {
+        router.get('/courses', filterValues, {
+            preserveState: true,
+            preserveScroll: true,
+            only: ['courses', 'filters'],
+        });
+    };
+
+    const handleCategoryChange = (e) => {
+        const value = e.target.value;
+        setCategory(value);
+        applyFilters({ search, category: value, level, price });
+    };
+
+    const handleLevelChange = (e) => {
+        const value = e.target.value;
+        setLevel(value);
+        applyFilters({ search, category, level: value, price });
+    };
+
+    const handlePriceChange = (e) => {
+        const value = e.target.value;
+        setPrice(value);
+        applyFilters({ search, category, level, price: value });
+    };
+
     return (
         <AppLayout>
             <Head title="Courses" />
@@ -25,6 +66,8 @@ export default function Index({ courses = [] }) {
                             <input
                                 type="text"
                                 placeholder="Search courses..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
@@ -32,29 +75,46 @@ export default function Index({ courses = [] }) {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Category
                             </label>
-                            <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option>All Categories</option>
+                            <select
+                                value={category}
+                                onChange={handleCategoryChange}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="">All Categories</option>
+                                {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.id}>
+                                        {cat.name_en || cat.name}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Level
                             </label>
-                            <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option>All Levels</option>
-                                <option>Beginner</option>
-                                <option>Intermediate</option>
-                                <option>Advanced</option>
+                            <select
+                                value={level}
+                                onChange={handleLevelChange}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="">All Levels</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
                             </select>
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Price
                             </label>
-                            <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option>All</option>
-                                <option>Free</option>
-                                <option>Paid</option>
+                            <select
+                                value={price}
+                                onChange={handlePriceChange}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="">All</option>
+                                <option value="free">Free</option>
+                                <option value="paid">Paid</option>
                             </select>
                         </div>
                     </div>
