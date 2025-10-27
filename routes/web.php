@@ -249,6 +249,7 @@ Route::group(
             Route::post('/{course}/modules/{module}/lessons/{lesson}/reorder', [LessonController::class, 'reorder'])->name('lessons.reorder');
 
             // Lesson Content
+            Route::get('/{course}/lessons/{lesson}/contents', [ContentController::class, 'index'])->name('contents.index');
             Route::post('/{course}/lessons/{lesson}/contents', [ContentController::class, 'store'])->name('contents.store');
             Route::put('/{course}/lessons/{lesson}/contents/{content}', [ContentController::class, 'update'])->name('contents.update');
             Route::delete('/{course}/lessons/{lesson}/contents/{content}', [ContentController::class, 'destroy'])->name('contents.destroy');
