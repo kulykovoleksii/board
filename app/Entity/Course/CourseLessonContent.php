@@ -34,6 +34,7 @@ class CourseLessonContent extends Model
     public const TYPE_IMAGE = 'image';
     public const TYPE_FILE = 'file';
     public const TYPE_QUIZ = 'quiz';
+    public const TYPE_MARKDOWN_FILE = 'markdown_file';
 
     protected $fillable = [
         'lesson_id',
@@ -64,6 +65,7 @@ class CourseLessonContent extends Model
             self::TYPE_IMAGE => 'Image',
             self::TYPE_FILE => 'File',
             self::TYPE_QUIZ => 'Quiz',
+            self::TYPE_MARKDOWN_FILE => 'Markdown File',
         ];
     }
 
@@ -125,11 +127,89 @@ class CourseLessonContent extends Model
     }
 
     /**
+     * Check if content is markdown file
+     */
+    public function isMarkdownFile(): bool
+    {
+        return $this->type === self::TYPE_MARKDOWN_FILE;
+    }
+
+    /**
      * Check if content has external URL (YouTube, Vimeo, etc.)
      */
     public function hasExternalUrl(): bool
     {
         return !empty($this->file_url);
+    }
+
+    /**
+     * Get markdown file content
+     */
+    public function getMarkdownContent(?string $locale = null): ?string
+    {
+        if (!$this->isMarkdownFile() || !$this->file_path) {
+            return null;
+        }
+
+        $locale = $locale ?? app()->getLocale();
+        $filePath = storage_path('app/' . $this->file_path);
+
+        // Try locale-specific file first (e.g., lesson-1.uk.md)
+        $localeFilePath = str_replace('.md', ".{$locale}.md", $filePath);
+
+        if (file_exists($localeFilePath)) {
+            return file_get_contents($localeFilePath);
+        }
+
+        // Fallback to main file
+        if (file_exists($filePath)) {
+            return file_get_contents($filePath);
+        }
+
+        return null;
+    }
+
+    /**
+     * Save markdown file content
+     */
+    public function saveMarkdownContent(string $content, ?string $locale = null): bool
+    {
+        if (!$this->isMarkdownFile()) {
+            return false;
+        }
+
+        $locale = $locale ?? app()->getLocale();
+
+        // Generate file path if not exists
+        if (!$this->file_path) {
+            $lesson = $this->lesson;
+            $module = $lesson->module;
+            $course = $module->course;
+
+            $courseSlug = \Illuminate\Support\Str::slug($course->slug);
+            $fileName = 'lesson-' . $lesson->id . '.md';
+
+            $this->file_path = "courses/{$courseSlug}/{$fileName}";
+        }
+
+        $filePath = storage_path('app/' . $this->file_path);
+        $localeFilePath = str_replace('.md', ".{$locale}.md", $filePath);
+
+        // Create directory if not exists
+        $directory = dirname($localeFilePath);
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        // Save file
+        $saved = file_put_contents($localeFilePath, $content) !== false;
+
+        if ($saved) {
+            $this->file_size = strlen($content);
+            $this->save();
+        }
+
+        return $saved;
     }
 
     /**
