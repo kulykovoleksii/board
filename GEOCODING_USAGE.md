@@ -310,3 +310,31 @@ $geocoding->registerGeocoder(new CustomGeocoder());
 - Postcodes.io is free and doesn't require setup
 - Check internet connectivity
 - Verify postal code format (e.g., "SW1A 1AA" not "SW1A1AA")
+
+## Testing
+
+Comprehensive test suite is available. See [GEOCODING_TESTS.md](GEOCODING_TESTS.md) for detailed testing documentation.
+
+### Run all tests
+
+```bash
+docker-compose exec php-cli php artisan test
+```
+
+### Run geocoding tests only
+
+```bash
+docker-compose exec php-cli php artisan test tests/Unit/Services/Geocoding/
+docker-compose exec php-cli php artisan test tests/Feature/Api/PostalCodeControllerTest.php
+```
+
+### Test Coverage
+
+- ✅ Region model (hierarchy, scopes, coordinates)
+- ✅ PostalCode model (queries, formatting, relations)
+- ✅ PostcodesIoGeocoder (UK postal codes)
+- ✅ GoogleMapsGeocoder (universal geocoding)
+- ✅ GeocodingService (caching, provider selection)
+- ✅ PostalCodeController (API endpoints, validation)
+
+All tests use HTTP mocking to avoid real API calls and database transactions for isolation.

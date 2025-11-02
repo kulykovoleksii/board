@@ -10,8 +10,15 @@
     ],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/kulykovoleksii/laravel-geocoding"
+        }
+    ],
     "require": {
         "php": "^8.2",
+        "kulykovoleksii/laravel-geocoding": "dev-main",
         "davejamesmiller/laravel-breadcrumbs": "^5.3",
         "elasticsearch/elasticsearch": "^8.11",
         "guzzlehttp/guzzle": "^7.8",

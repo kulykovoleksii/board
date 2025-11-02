@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Entity\Adverts\Category;
-use App\Entity\Region;
+use Kulykovoleksii\Geocoding\Models\Region;
 use Inertia\Inertia;
 
 class HomeController extends Controller

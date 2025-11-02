@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Adverts\FavoriteController;
 use App\Http\Controllers\Api\User\ProfileController;
 use App\Http\Controllers\Api\User\FavoriteController as UserFavoriteController;
 use App\Http\Controllers\Api\User\AdvertController as UserAdvertController;
+use App\Http\Controllers\Api\PostalCodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,10 @@ Route::group(['as' => 'api.'],
     function () {
         Route::get('/', [HomeController::class, 'home']);
         Route::post('/register', [RegisterController::class, 'register']);
+
+        Route::get('/postal-codes/{postalCode}', [PostalCodeController::class, 'show']);
+        Route::post('/geocode', [PostalCodeController::class, 'geocode']);
+        Route::post('/reverse-geocode', [PostalCodeController::class, 'reverseGeocode']);
 
         Route::middleware('auth:api')->group(function () {
             Route::resource('adverts', AdvertController::class)->only('index', 'show');
