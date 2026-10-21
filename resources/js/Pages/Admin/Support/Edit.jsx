@@ -9,18 +9,18 @@ export default function Edit({ ticket }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(`/admin/tickets/${ticket.id}`);
+        put(`/admin/support/${ticket.id}`);
     };
 
     return (
         <AdminLayout>
-            <Head title={`Edit Ticket #${ticket.id}`} />
+            <Head title={`Edit Support #${ticket.id}`} />
 
             <div className="max-w-3xl mx-auto">
                 <div className="mb-6">
                     <div className="flex items-center gap-2 mb-2">
                         <Link
-                            href={`/admin/tickets/${ticket.id}`}
+                            href={`/admin/support/${ticket.id}`}
                             className="text-gray-500 hover:text-gray-700"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,7 +28,7 @@ export default function Edit({ ticket }) {
                             </svg>
                         </Link>
                         <h1 className="text-2xl font-bold text-gray-900">
-                            Edit Ticket #{ticket.id}
+                            Edit Support #{ticket.id}
                         </h1>
                     </div>
                 </div>
@@ -50,7 +50,7 @@ export default function Edit({ ticket }) {
                                         ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                                         : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
                                 }`}
-                                placeholder="Enter ticket subject"
+                                placeholder="Enter subject"
                                 required
                             />
                             {errors.subject && (
@@ -73,7 +73,7 @@ export default function Edit({ ticket }) {
                                         ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                                         : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'
                                 }`}
-                                placeholder="Enter ticket content"
+                                placeholder="Enter content"
                                 required
                             />
                             {errors.content && (
@@ -85,7 +85,7 @@ export default function Edit({ ticket }) {
                     {/* Actions */}
                     <div className="flex items-center justify-between mt-6">
                         <Link
-                            href={`/admin/tickets/${ticket.id}`}
+                            href={`/admin/support/${ticket.id}`}
                             className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                         >
                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

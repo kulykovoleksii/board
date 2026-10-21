@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Ticket;
+namespace App\Entity\Support;
 
 use App\Entity\User\User;
 use Carbon\Carbon;
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @method Builder forUser(User $user)
  */
-class Ticket extends Model
+class Support extends Model
 {
     protected $table = 'ticket_tickets';
 
@@ -47,7 +47,7 @@ class Ticket extends Model
     public function addMessage(int $userId, $message): void
     {
         if (!$this->allowsMessages()) {
-            throw new \DomainException('Ticket is closed for messages.');
+            throw new \DomainException('Support request is closed for messages.');
         }
         $this->messages()->create([
             'user_id' => $userId,
@@ -64,7 +64,7 @@ class Ticket extends Model
     public function approve(int $userId): void
     {
         if ($this->isApproved()) {
-            throw new \DomainException('Ticket is already approved.');
+            throw new \DomainException('Support request is already approved.');
         }
         $this->setStatus(Status::APPROVED, $userId);
     }
@@ -72,7 +72,7 @@ class Ticket extends Model
     public function close(int $userId): void
     {
         if ($this->isClosed()) {
-            throw new \DomainException('Ticket is already closed.');
+            throw new \DomainException('Support request is already closed.');
         }
         $this->setStatus(Status::CLOSED, $userId);
     }
@@ -80,7 +80,7 @@ class Ticket extends Model
     public function reopen(int $userId): void
     {
         if (!$this->isClosed()) {
-            throw new \DomainException('Ticket is not closed.');
+            throw new \DomainException('Support request is not closed.');
         }
         $this->setStatus(Status::APPROVED, $userId);
     }

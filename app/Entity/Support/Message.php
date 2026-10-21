@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Ticket;
+namespace App\Entity\Support;
 
 use App\Entity\User\User;
 use Carbon\Carbon;

@@ -2,16 +2,16 @@
 
 namespace App\UseCases\Tickets;
 
-use App\Entity\Ticket\Ticket;
+use App\Entity\Support\Support;
 use App\Http\Requests\Ticket\CreateRequest;
 use App\Http\Requests\Ticket\EditRequest;
 use App\Http\Requests\Ticket\MessageRequest;
 
-class TicketService
+class SupportService
 {
-    public function create(int $userId, CreateRequest $request): Ticket
+    public function create(int $userId, CreateRequest $request): Support
     {
-        return Ticket::new($userId, $request['subject'], $request['content']);
+        return Support::new($userId, $request['subject'], $request['content']);
     }
 
     public function edit(int $id, EditRequest $request): void
@@ -51,7 +51,7 @@ class TicketService
     {
         $ticket = $this->getTicket($id);
         if (!$ticket->canBeRemoved()) {
-            throw new \DomainException('Unable to remove active ticket');
+            throw new \DomainException('Unable to remove active support request');
         }
         $ticket->delete();
     }
@@ -62,8 +62,8 @@ class TicketService
         $ticket->delete();
     }
 
-    private function getTicket($id): Ticket
+    private function getTicket($id): Support
     {
-        return Ticket::findOrFail($id);
+        return Support::findOrFail($id);
     }
 }

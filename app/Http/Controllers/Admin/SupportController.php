@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Entity\Ticket\Status;
-use App\Entity\Ticket\Ticket;
+use App\Entity\Support\Status;
+use App\Entity\Support\Support;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ticket\EditRequest;
 use App\Http\Requests\Ticket\MessageRequest;
-use App\UseCases\Tickets\TicketService;
+use App\UseCases\Tickets\SupportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class TicketController extends Controller
+class SupportController extends Controller
 {
     private $service;
 
-    public function __construct(TicketService $service)
+    public function __construct(SupportService $service)
     {
         $this->service = $service;
         $this->middleware('can:manage-tickets');
@@ -24,7 +24,7 @@ class TicketController extends Controller
 
     public function index(Request $request)
     {
-        $query = Ticket::with('user')->orderByDesc('updated_at');
+        $query = Support::with('user')->orderByDesc('updated_at');
 
         if (!empty($value = $request->get('id'))) {
             $query->where('id', $value);
@@ -42,7 +42,7 @@ class TicketController extends Controller
 
         $statuses = Status::statusesList();
 
-        return Inertia::render('Admin/Tickets/Index', [
+        return Inertia::render('Admin/Support/Index', [
             'tickets' => $tickets,
             'statuses' => $statuses,
             'filters' => [
@@ -53,23 +53,23 @@ class TicketController extends Controller
         ]);
     }
 
-    public function show(Ticket $ticket)
+    public function show(Support $ticket)
     {
         $ticket->load('user', 'messages.user', 'statuses.user');
 
-        return Inertia::render('Admin/Tickets/Show', [
+        return Inertia::render('Admin/Support/Show', [
             'ticket' => $ticket,
         ]);
     }
 
-    public function editForm(Ticket $ticket)
+    public function editForm(Support $ticket)
     {
-        return Inertia::render('Admin/Tickets/Edit', [
+        return Inertia::render('Admin/Support/Edit', [
             'ticket' => $ticket,
         ]);
     }
 
-    public function edit(EditRequest $request, Ticket $ticket)
+    public function edit(EditRequest $request, Support $ticket)
     {
         try {
             $this->service->edit($ticket->id, $request);
@@ -77,10 +77,10 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return to_route('admin.tickets.show', $ticket);
+        return to_route('admin.support.show', $ticket);
     }
 
-    public function message(MessageRequest $request, Ticket $ticket)
+    public function message(MessageRequest $request, Support $ticket)
     {
         try {
             $this->service->message(Auth::id(), $ticket->id, $request);
@@ -88,11 +88,10 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return to_route('admin.tickets.show', $ticket);
+        return to_route('admin.support.show', $ticket);
     }
 
-
-    public function approve(Ticket $ticket)
+    public function approve(Support $ticket)
     {
         try {
             $this->service->approve(Auth::id(), $ticket->id);
@@ -100,10 +99,10 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return to_route('admin.tickets.show', $ticket);
+        return to_route('admin.support.show', $ticket);
     }
 
-    public function close(Ticket $ticket)
+    public function close(Support $ticket)
     {
         try {
             $this->service->close(Auth::id(), $ticket->id);
@@ -111,10 +110,10 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return to_route('admin.tickets.show', $ticket);
+        return to_route('admin.support.show', $ticket);
     }
 
-    public function reopen(Ticket $ticket)
+    public function reopen(Support $ticket)
     {
         try {
             $this->service->reopen(Auth::id(), $ticket->id);
@@ -122,10 +121,10 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return to_route('admin.tickets.show', $ticket);
+        return to_route('admin.support.show', $ticket);
     }
 
-    public function destroy(Ticket $ticket)
+    public function destroy(Support $ticket)
     {
         try {
             $this->service->removeByAdmin($ticket->id);
@@ -133,6 +132,6 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return to_route('admin.tickets.index');
+        return to_route('admin.support.index');
     }
 }

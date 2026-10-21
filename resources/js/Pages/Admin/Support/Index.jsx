@@ -11,12 +11,12 @@ export default function Index({ tickets, statuses, filters }) {
 
     const handleFilter = (e) => {
         e.preventDefault();
-        router.get('/admin/tickets', formData, { preserveState: true });
+        router.get('/admin/support', formData, { preserveState: true });
     };
 
     const handleClear = () => {
         setFormData({ id: '', user: '', status: '' });
-        router.get('/admin/tickets', {}, { preserveState: true });
+        router.get('/admin/support', {}, { preserveState: true });
     };
 
     const statusColors = {
@@ -33,13 +33,13 @@ export default function Index({ tickets, statuses, filters }) {
 
     return (
         <AdminLayout>
-            <Head title="Tickets" />
+            <Head title="Support" />
 
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Tickets</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">Support</h1>
                     <p className="mt-2 text-gray-600">
-                        Manage support tickets
+                        Manage support requests
                     </p>
                 </div>
             </div>
@@ -151,7 +151,7 @@ export default function Index({ tickets, statuses, filters }) {
                                         </td>
                                         <td className="px-6 py-4 text-sm">
                                             <Link
-                                                href={`/admin/tickets/${ticket.id}`}
+                                                href={`/admin/support/${ticket.id}`}
                                                 className="text-blue-600 hover:text-blue-800 font-medium"
                                             >
                                                 {ticket.subject}
@@ -204,10 +204,10 @@ export default function Index({ tickets, statuses, filters }) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                     </svg>
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        No tickets found
+                        No support requests found
                     </h3>
                     <p className="text-gray-600">
-                        Try adjusting your filters or wait for users to create support tickets.
+                        Try adjusting your filters or wait for users to create support requests.
                     </p>
                 </div>
             )}

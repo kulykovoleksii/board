@@ -6,7 +6,7 @@ use App\Entity\Adverts\Category;
 use App\Entity\Banner\Banner;
 use App\Entity\Page;
 use App\Entity\Region;
-use App\Entity\Ticket\Ticket;
+use App\Entity\Support\Support;
 use App\Entity\User\User;
 use App\Http\Router\AdvertsPath;
 use App\Http\Router\PagePath;
@@ -173,21 +173,21 @@ Breadcrumbs::register('cabinet.banners.create.banner', function (Crumbs $crumbs,
     $crumbs->push($region ? $region->name : 'All', route('cabinet.banners.create.banner', [$category, $region]));
 });
 
-// Cabinet Tickets
+// Cabinet Support
 
-Breadcrumbs::register('cabinet.tickets.index', function (Crumbs $crumbs) {
+Breadcrumbs::register('cabinet.support.index', function (Crumbs $crumbs) {
     $crumbs->parent('cabinet.home');
-    $crumbs->push('Tickets', route('cabinet.tickets.index'));
+    $crumbs->push('Support', route('cabinet.support.index'));
 });
 
-Breadcrumbs::register('cabinet.tickets.create', function (Crumbs $crumbs) {
-    $crumbs->parent('cabinet.tickets.index');
-    $crumbs->push('Create', route('cabinet.tickets.create'));
+Breadcrumbs::register('cabinet.support.create', function (Crumbs $crumbs) {
+    $crumbs->parent('cabinet.support.index');
+    $crumbs->push('Create', route('cabinet.support.create'));
 });
 
-Breadcrumbs::register('cabinet.tickets.show', function (Crumbs $crumbs, Ticket $ticket) {
-    $crumbs->parent('cabinet.tickets.index');
-    $crumbs->push($ticket->subject, route('cabinet.tickets.show', $ticket));
+Breadcrumbs::register('cabinet.support.show', function (Crumbs $crumbs, Support $ticket) {
+    $crumbs->parent('cabinet.support.index');
+    $crumbs->push($ticket->subject, route('cabinet.support.show', $ticket));
 });
 
 // Admin
@@ -267,21 +267,21 @@ Breadcrumbs::register('admin.banners.reject', function (Crumbs $crumbs, Banner $
     $crumbs->push('Reject', route('admin.banners.reject', $banner));
 });
 
-// Tickets
+// Support
 
-Breadcrumbs::register('admin.tickets.index', function (Crumbs $crumbs) {
+Breadcrumbs::register('admin.support.index', function (Crumbs $crumbs) {
     $crumbs->parent('admin.home');
-    $crumbs->push('Tickets', route('admin.tickets.index'));
+    $crumbs->push('Support', route('admin.support.index'));
 });
 
-Breadcrumbs::register('admin.tickets.show', function (Crumbs $crumbs, Ticket $ticket) {
-    $crumbs->parent('admin.tickets.index');
-    $crumbs->push($ticket->subject, route('admin.tickets.show', $ticket));
+Breadcrumbs::register('admin.support.show', function (Crumbs $crumbs, Support $ticket) {
+    $crumbs->parent('admin.support.index');
+    $crumbs->push($ticket->subject, route('admin.support.show', $ticket));
 });
 
-Breadcrumbs::register('admin.tickets.edit', function (Crumbs $crumbs, Ticket $ticket) {
-    $crumbs->parent('admin.tickets.show', $ticket);
-    $crumbs->push('Edit', route('admin.tickets.edit', $ticket));
+Breadcrumbs::register('admin.support.edit', function (Crumbs $crumbs, Support $ticket) {
+    $crumbs->parent('admin.support.show', $ticket);
+    $crumbs->push('Edit', route('admin.support.edit', $ticket));
 });
 
 // Regions

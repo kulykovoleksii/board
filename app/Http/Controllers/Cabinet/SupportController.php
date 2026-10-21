@@ -2,48 +2,48 @@
 
 namespace App\Http\Controllers\Cabinet;
 
-use App\Entity\Ticket\Ticket;
+use App\Entity\Support\Support;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ticket\CreateRequest;
 use App\Http\Requests\Ticket\MessageRequest;
-use App\UseCases\Tickets\TicketService;
+use App\UseCases\Tickets\SupportService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
-class TicketController extends Controller
+class SupportController extends Controller
 {
     private $service;
 
-    public function __construct(TicketService $service)
+    public function __construct(SupportService $service)
     {
         $this->service = $service;
     }
 
     public function index()
     {
-        $tickets = Ticket::forUser(Auth::user())
+        $tickets = Support::forUser(Auth::user())
             ->with('messages')
             ->orderByDesc('updated_at')
             ->paginate(20);
 
-        return Inertia::render('Cabinet/Tickets/Index', [
+        return Inertia::render('Cabinet/Support/Index', [
             'tickets' => $tickets,
         ]);
     }
 
-    public function show(Ticket $ticket)
+    public function show(Support $ticket)
     {
         $ticket->load('user', 'messages');
 
-        return Inertia::render('Cabinet/Tickets/Show', [
+        return Inertia::render('Cabinet/Support/Show', [
             'ticket' => $ticket,
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('Cabinet/Tickets/Create');
+        return Inertia::render('Cabinet/Support/Create');
     }
 
     public function store(CreateRequest $request)
@@ -54,10 +54,10 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return to_route('cabinet.tickets.show', $ticket);
+        return to_route('cabinet.support.show', $ticket);
     }
 
-    public function message(MessageRequest $request, Ticket $ticket)
+    public function message(MessageRequest $request, Support $ticket)
     {
         try {
             $this->service->message(Auth::id(), $ticket->id, $request);
@@ -65,10 +65,10 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return to_route('cabinet.tickets.show', $ticket);
+        return to_route('cabinet.support.show', $ticket);
     }
 
-    public function destroy(Ticket $ticket)
+    public function destroy(Support $ticket)
     {
         $this->checkAccess($ticket);
         try {
@@ -77,10 +77,10 @@ class TicketController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return to_route('cabinet.tickets.index');
+        return to_route('cabinet.support.index');
     }
 
-    private function checkAccess(Ticket $ticket): void
+    private function checkAccess(Support $ticket): void
     {
         if (!Gate::allows('manage-own-ticket', $ticket)) {
             abort(403);

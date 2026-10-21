@@ -8,7 +8,7 @@ export default function CabinetLayout({ children, activeTab = 'dashboard' }) {
         { name: 'Favorites', href: '/cabinet/favorites', key: 'favorites' },
         { name: 'Banners', href: '/cabinet/banners', key: 'banners' },
         { name: 'Profile', href: '/cabinet/profile', key: 'profile' },
-        { name: 'Tickets', href: '/cabinet/tickets', key: 'tickets' },
+        { name: 'Support', href: '/cabinet/support', key: 'support' },
     ];
 
     return (

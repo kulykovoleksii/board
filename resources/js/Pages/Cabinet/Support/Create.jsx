@@ -9,16 +9,16 @@ export default function Create() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post('/cabinet/tickets');
+        post('/cabinet/support');
     };
 
     return (
-        <CabinetLayout activeTab="tickets">
-            <Head title="Create Ticket" />
+        <CabinetLayout activeTab="support">
+            <Head title="New Support Request" />
 
             <div className="max-w-3xl mx-auto">
                 <div className="mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900">Create Support Ticket</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">New Support Request</h1>
                     <p className="mt-2 text-gray-600">
                         Describe your issue and we'll get back to you as soon as possible
                     </p>
@@ -87,7 +87,7 @@ export default function Create() {
                                     </h3>
                                     <div className="mt-2 text-sm text-blue-700">
                                         <ul className="list-disc list-inside space-y-1">
-                                            <li>Our support team will review your ticket within 24 hours</li>
+                                            <li>Our support team will review your request within 24 hours</li>
                                             <li>You'll receive email notifications for any updates</li>
                                             <li>You can add more details by replying to the ticket</li>
                                         </ul>
@@ -100,7 +100,7 @@ export default function Create() {
                     {/* Actions */}
                     <div className="flex items-center justify-between mt-6">
                         <Link
-                            href="/cabinet/tickets"
+                            href="/cabinet/support"
                             className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                         >
                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +131,7 @@ export default function Create() {
                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                     </svg>
-                                    Create Ticket
+                                    New Support Request
                                 </>
                             )}
                         </button>

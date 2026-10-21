@@ -8,31 +8,31 @@ export default function Show({ ticket }) {
 
     const handleApprove = () => {
         if (confirm('Approve this ticket?')) {
-            router.post(`/admin/tickets/${ticket.id}/approve`);
+            router.post(`/admin/support/${ticket.id}/approve`);
         }
     };
 
     const handleClose = () => {
         if (confirm('Close this ticket?')) {
-            router.post(`/admin/tickets/${ticket.id}/close`);
+            router.post(`/admin/support/${ticket.id}/close`);
         }
     };
 
     const handleReopen = () => {
         if (confirm('Reopen this ticket?')) {
-            router.post(`/admin/tickets/${ticket.id}/reopen`);
+            router.post(`/admin/support/${ticket.id}/reopen`);
         }
     };
 
     const handleDelete = () => {
         if (confirm('Are you sure you want to delete this ticket?')) {
-            router.delete(`/admin/tickets/${ticket.id}`);
+            router.delete(`/admin/support/${ticket.id}`);
         }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(`/admin/tickets/${ticket.id}/message`, {
+        post(`/admin/support/${ticket.id}/message`, {
             onSuccess: () => reset('message'),
         });
     };
@@ -55,14 +55,14 @@ export default function Show({ ticket }) {
 
     return (
         <AdminLayout>
-            <Head title={`Ticket #${ticket.id} - ${ticket.subject}`} />
+            <Head title={`Support #${ticket.id} - ${ticket.subject}`} />
 
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-6">
                     <div className="flex items-center gap-2 mb-2">
                         <Link
-                            href="/admin/tickets"
+                            href="/admin/support"
                             className="text-gray-500 hover:text-gray-700"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@ export default function Show({ ticket }) {
                             </svg>
                         </Link>
                         <h1 className="text-2xl font-bold text-gray-900">
-                            Ticket #{ticket.id}
+                            Support #{ticket.id}
                         </h1>
                     </div>
                 </div>
@@ -78,7 +78,7 @@ export default function Show({ ticket }) {
                 {/* Actions */}
                 <div className="flex gap-2 mb-6">
                     <Link
-                        href={`/admin/tickets/${ticket.id}/edit`}
+                        href={`/admin/support/${ticket.id}/edit`}
                         className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
                     >
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

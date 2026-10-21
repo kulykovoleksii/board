@@ -15,7 +15,7 @@ use App\Http\Controllers\Cabinet\HomeController as CabinetHomeController;
 use App\Http\Controllers\Cabinet\ProfileController;
 use App\Http\Controllers\Cabinet\PhoneController;
 use App\Http\Controllers\Cabinet\FavoriteController;
-use App\Http\Controllers\Cabinet\TicketController;
+use App\Http\Controllers\Cabinet\SupportController;
 use App\Http\Controllers\Adverts\AdvertController;
 use App\Http\Controllers\Adverts\FavoriteController as AdvertFavoriteController;
 use App\Http\Controllers\Cabinet\Adverts\AdvertController as CabinetAdvertController;
@@ -32,7 +32,7 @@ use App\Http\Controllers\Admin\Adverts\CategoryController;
 use App\Http\Controllers\Admin\Adverts\AttributeController;
 use App\Http\Controllers\Admin\Adverts\AdvertController as AdminAdvertController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
-use App\Http\Controllers\Admin\TicketController as AdminTicketController;
+use App\Http\Controllers\Admin\SupportController as AdminSupportController;
 use App\Http\Controllers\Admin\Courses\CourseController as AdminCourseController;
 use App\Http\Controllers\Admin\Courses\ModuleController;
 use App\Http\Controllers\Admin\Courses\LessonController;
@@ -113,8 +113,8 @@ Route::group(
         Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites.index');
         Route::delete('favorites/{advert}', [FavoriteController::class, 'remove'])->name('favorites.remove');
 
-        Route::resource('tickets', TicketController::class)->only(['index', 'show', 'create', 'store', 'destroy']);
-        Route::post('tickets/{ticket}/message', [TicketController::class, 'message'])->name('tickets.message');
+        Route::resource('support', SupportController::class)->only(['index', 'show', 'create', 'store', 'destroy']);
+        Route::post('support/{ticket}/message', [SupportController::class, 'message'])->name('support.message');
 
         Route::group([
             'prefix' => 'adverts',
@@ -256,16 +256,16 @@ Route::group(
             Route::post('/{course}/lessons/{lesson}/contents/{content}/reorder', [ContentController::class, 'reorder'])->name('contents.reorder');
         });
 
-        Route::group(['prefix' => 'tickets', 'as' => 'tickets.'], function () {
-            Route::get('/', [AdminTicketController::class, 'index'])->name('index');
-            Route::get('/{ticket}/show', [AdminTicketController::class, 'show'])->name('show');
-            Route::get('/{ticket}/edit', [AdminTicketController::class, 'editForm'])->name('edit');
-            Route::put('/{ticket}/edit', [AdminTicketController::class, 'edit']);
-            Route::post('{ticket}/message', [AdminTicketController::class, 'message'])->name('message');
-            Route::post('/{ticket}/close', [AdminTicketController::class, 'close'])->name('close');
-            Route::post('/{ticket}/approve', [AdminTicketController::class, 'approve'])->name('approve');
-            Route::post('/{ticket}/reopen', [AdminTicketController::class, 'reopen'])->name('reopen');
-            Route::delete('/{ticket}/destroy', [AdminTicketController::class, 'destroy'])->name('destroy');
+        Route::group(['prefix' => 'support', 'as' => 'support.'], function () {
+            Route::get('/', [AdminSupportController::class, 'index'])->name('index');
+            Route::get('/{ticket}/show', [AdminSupportController::class, 'show'])->name('show');
+            Route::get('/{ticket}/edit', [AdminSupportController::class, 'editForm'])->name('edit');
+            Route::put('/{ticket}/edit', [AdminSupportController::class, 'edit']);
+            Route::post('{ticket}/message', [AdminSupportController::class, 'message'])->name('message');
+            Route::post('/{ticket}/close', [AdminSupportController::class, 'close'])->name('close');
+            Route::post('/{ticket}/approve', [AdminSupportController::class, 'approve'])->name('approve');
+            Route::post('/{ticket}/reopen', [AdminSupportController::class, 'reopen'])->name('reopen');
+            Route::delete('/{ticket}/destroy', [AdminSupportController::class, 'destroy'])->name('destroy');
         });
     }
 );
