@@ -25,7 +25,6 @@ class VerifyCommand extends Command
     {
         $email = $this->argument('email');
 
-        /** @var User $user */
         if (!$user = User::where('email', $email)->first()) {
             $this->error('Undefined user with email ' . $email);
             return false;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Cabinet;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\PhoneVerifyRequest;
+use App\Http\Requests\Cabinet\PhoneVerifyRequest;
 use App\UseCases\Profile\PhoneService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;

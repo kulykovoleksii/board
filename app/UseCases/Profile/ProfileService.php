@@ -3,7 +3,7 @@
 namespace App\UseCases\Profile;
 
 use App\Entity\User\User;
-use App\Http\Requests\Auth\ProfileEditRequest;
+use App\Http\Requests\Cabinet\ProfileEditRequest;
 
 class ProfileService
 {

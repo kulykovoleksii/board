@@ -160,7 +160,7 @@ class CourseLessonProgress extends Model
     /**
      * Get time spent on lesson
      */
-    public function getTimeSpentAttribute(): ?int
+    public function getTimeSpentAttribute(): int|float|null
     {
         if ($this->started_at === null) {
             return null;

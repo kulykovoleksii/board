@@ -16,7 +16,6 @@ class RoleCommand extends Command
         $email = $this->argument('email');
         $role = $this->argument('role');
 
-        /** @var User $user */
         if (!$user = User::where('email', $email)->first()) {
             $this->error('Undefined user with email ' . $email);
             return false;

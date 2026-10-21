@@ -1,0 +1,29 @@
+includes:
+    - vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+    level: 5
+    treatPhpDocTypesAsCertain: false
+    excludePaths:
+        - app/Http/Middleware/TrustProxies.php
+    ignoreErrors:
+        # Course relations - Larastan false positives
+        - '#Relation .* is not found in App\\Entity\\Course#'
+        - '#Relation .* is not found in App\\Entity\\Support\\Support#'
+        - '#Call to an undefined static method App\\Entity\\Course\\CourseCategory::defaultOrder#'
+        # Nested set library methods - Larastan false positives
+        - '#Call to an undefined method Kalnoy\\Nestedset\\AncestorsRelation::defaultOrder#'
+        - '#Call to an undefined (static )?method.*::defaultOrder#'
+        - '#Parameter \#1 \$node of method App\\Entity\\Page::(insertBeforeNode|insertAfterNode)#'
+        # each() on collection after load() - Larastan false positive
+        - '#Cannot call method each\(\) on array#'
+        # SmsChannel custom method
+        - '#Call to an undefined method Illuminate\\Notifications\\Notification::toSms#'
+        # PagePath custom router return type
+        - '#Method App\\Http\\Router\\PagePath::resolveRouteBinding\(\) should return#'
+        # Twilio package not installed
+        - '#Instantiated class Twilio\\Rest\\Client not found#'
+        # Auth Verified event - nullable user
+        - '#Parameter \#1 \$user of class Illuminate\\Auth\\Events\\Verified constructor expects#'

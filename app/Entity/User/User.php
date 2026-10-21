@@ -2,7 +2,6 @@
 
 namespace App\Entity\User;
 
-use App\Entity\Adverts\Advert\Advert;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
@@ -19,13 +18,13 @@ use Laravel\Passport\HasApiTokens;
  * @property bool $phone_verified
  * @property string $password
  * @property string $verify_token
- * @property string $phone_verify_token
- * @property Carbon $phone_verify_token_expire
+ * @property string|null $phone_verify_token
+ * @property Carbon|null $phone_verify_token_expire
  * @property boolean $phone_auth
  * @property string $role
  * @property string $status
  *
- * @property Network[] networks
+ * @property Network[] $networks
  *
  * @method Builder byNetwork(string $network, string $identity)
  */
@@ -199,23 +198,6 @@ class User extends Authenticatable
         $this->saveOrFail();
     }
 
-    public function addToFavorites($id): void
-    {
-        if ($this->hasInFavorites($id)) {
-            throw new \DomainException('This advert is already added to favorites.');
-        }
-        $this->favorites()->attach($id);
-    }
-
-    public function removeFromFavorites($id): void
-    {
-        $this->favorites()->detach($id);
-    }
-
-    public function hasInFavorites($id): bool
-    {
-        return $this->favorites()->where('id', $id)->exists();
-    }
 
     public function isModerator(): bool
     {
@@ -250,11 +232,6 @@ class User extends Authenticatable
     public function hasFilledProfile(): bool
     {
         return !empty($this->name) && !empty($this->last_name) && $this->isPhoneVerified();
-    }
-
-    public function favorites()
-    {
-        return $this->belongsToMany(Advert::class, 'advert_favorites', 'user_id', 'advert_id');
     }
 
     public function networks()

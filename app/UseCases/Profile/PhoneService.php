@@ -3,7 +3,7 @@
 namespace App\UseCases\Profile;
 
 use App\Entity\User\User;
-use App\Http\Requests\Auth\PhoneVerifyRequest;
+use App\Http\Requests\Cabinet\PhoneVerifyRequest;
 use App\Services\Sms\SmsSender;
 use Carbon\Carbon;
 

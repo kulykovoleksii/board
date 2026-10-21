@@ -4,9 +4,6 @@ import AppLayout from './AppLayout';
 export default function CabinetLayout({ children, activeTab = 'dashboard' }) {
     const tabs = [
         { name: 'Dashboard', href: '/cabinet', key: 'dashboard' },
-        { name: 'Adverts', href: '/cabinet/adverts', key: 'adverts' },
-        { name: 'Favorites', href: '/cabinet/favorites', key: 'favorites' },
-        { name: 'Banners', href: '/cabinet/banners', key: 'banners' },
         { name: 'Profile', href: '/cabinet/profile', key: 'profile' },
         { name: 'Support', href: '/cabinet/support', key: 'support' },
     ];
